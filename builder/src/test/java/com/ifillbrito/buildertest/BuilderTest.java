@@ -402,7 +402,7 @@ public class BuilderTest
                 // add a child (Person) to Person
                 .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Anna").as("anna")
-                    // use the same Bob's last name
+                    // use Bob's last name
                     .setUsingAlias(Person::setLastName, Person.class, "bob", Person::getLastName)
                     // add object ContactInformation to Person
                     .setUsingBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
