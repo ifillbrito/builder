@@ -71,12 +71,12 @@ public class BuilderTest
     }
 
     @Test
-    public void setUsingAlias_setterAndAlias()
+    public void setWithAlias_setterAndAlias()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias(ObjectA::setObjectA, "alias")
+                .setWithAlias(ObjectA::setObjectA, "alias")
                 .build();
 
         // check reference
@@ -86,22 +86,22 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setUsingAlias_nullSetterAndAlias()
+    public void setWithAlias_nullSetterAndAlias()
     {
         Builder.of(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias(null, "alias")
+                .setWithAlias(null, "alias")
                 .build();
     }
 
     @Test
-    public void setUsingAlias_setterAndNullAlias_positive()
+    public void setWithAlias_setterAndNullAlias_positive()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as(null)
                 .set(ObjectA::setText, "text")
-                .setUsingAlias(ObjectA::setObjectA, null)
+                .setWithAlias(ObjectA::setObjectA, null)
                 .build();
 
         // check reference
@@ -111,32 +111,32 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setUsingAlias_setterAndNonDefinedAlias_exception()
+    public void setWithAlias_setterAndNonDefinedAlias_exception()
     {
         Builder.of(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias(ObjectA::setObjectA, "another alias")
+                .setWithAlias(ObjectA::setObjectA, "another alias")
                 .build();
     }
 
     @Test(expected = ClassCastException.class)
-    public void setUsingAlias_setterAndAlias_classCastException()
+    public void setWithAlias_setterAndAlias_classCastException()
     {
         Builder.of(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias(ObjectA::setObjectB, "alias")
+                .setWithAlias(ObjectA::setObjectB, "alias")
                 .build();
     }
 
     @Test
-    public void setUsingAlias_setterAndAliasTypeAndAliasAndFunction()
+    public void setWithAlias_setterAndAliasTypeAndAliasAndFunction()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias( // create ObjectB using data from ObjectA
+                .setWithAlias( // create ObjectB using data from ObjectA
                         ObjectA::setObjectB,
                         ObjectA.class,
                         "a",
@@ -152,12 +152,12 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setUsingAlias_nullSetterAndAliasTypeAndAliasAndFunction_exception()
+    public void setWithAlias_nullSetterAndAliasTypeAndAliasAndFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias( // create ObjectB using data from ObjectA
+                .setWithAlias( // create ObjectB using data from ObjectA
                         null,
                         ObjectA.class,
                         "a",
@@ -170,12 +170,12 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setUsingAlias_setterAndAliasTypeAndAliasAndNullFunction_exception()
+    public void setWithAlias_setterAndAliasTypeAndAliasAndNullFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias( // create ObjectB using data from ObjectA
+                .setWithAlias( // create ObjectB using data from ObjectA
                         ObjectA::setObjectB,
                         ObjectA.class,
                         "a",
@@ -184,12 +184,12 @@ public class BuilderTest
     }
 
     @Test(expected = ClassCastException.class)
-    public void setUsingAlias_setterAndAliasTypeAndAliasAndFunction_classCastException()
+    public void setWithAlias_setterAndAliasTypeAndAliasAndFunction_classCastException()
     {
         Builder.of(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
-                .setUsingAlias( // create ObjectB using data from ObjectA
+                .setWithAlias( // create ObjectB using data from ObjectA
                         ObjectA::setObjectB,
                         ObjectB.class, // the alias "a" doesn't point to an object of type ObjectB
                         "a",
@@ -202,12 +202,12 @@ public class BuilderTest
     }
 
     @Test
-    public void setUsingBuilder()
+    public void setWithBuilder()
     {
     }
 
     @Test
-    public void setUsingBuilder1()
+    public void setWithBuilder1()
     {
     }
 
@@ -232,22 +232,22 @@ public class BuilderTest
     }
 
     @Test
-    public void addUsingAlias()
+    public void addWithAlias()
     {
     }
 
     @Test
-    public void addUsingAlias1()
+    public void addWithAlias1()
     {
     }
 
     @Test
-    public void addUsingBuilder()
+    public void addWithBuilder()
     {
     }
 
     @Test
-    public void addUsingBuilder1()
+    public void addWithBuilder1()
     {
     }
 
@@ -257,17 +257,17 @@ public class BuilderTest
     }
 
     @Test
-    public void putUsingAliases()
+    public void putWithAliases()
     {
     }
 
     @Test
-    public void putUsingAliasForKey()
+    public void putWithAliasForKey()
     {
     }
 
     @Test
-    public void putUsingAliasForValue()
+    public void putWithAliasForValue()
     {
     }
 
@@ -277,17 +277,17 @@ public class BuilderTest
     }
 
     @Test
-    public void putUsingAliases1()
+    public void putWithAliases1()
     {
     }
 
     @Test
-    public void putUsingAliasForKey1()
+    public void putWithAliasForKey1()
     {
     }
 
     @Test
-    public void putUsingAliasForValue1()
+    public void putWithAliasForValue1()
     {
     }
 
@@ -297,17 +297,17 @@ public class BuilderTest
     }
 
     @Test
-    public void putUsingAliases2()
+    public void putWithAliases2()
     {
     }
 
     @Test
-    public void putUsingAliasForKey2()
+    public void putWithAliasForKey2()
     {
     }
 
     @Test
-    public void putUsingAliasForValue2()
+    public void putWithAliasForValue2()
     {
     }
 
@@ -317,17 +317,17 @@ public class BuilderTest
     }
 
     @Test
-    public void putUsingAliases3()
+    public void putWithAliases3()
     {
     }
 
     @Test
-    public void putUsingAliasForKey3()
+    public void putWithAliasForKey3()
     {
     }
 
     @Test
-    public void putUsingAliasForValue3()
+    public void putWithAliasForValue3()
     {
     }
 
@@ -337,32 +337,32 @@ public class BuilderTest
     }
 
     @Test
-    public void putUsingBuilder()
+    public void putWithBuilder()
     {
     }
 
     @Test
-    public void putUsingAliasForKeyAndBuilderForValue()
+    public void putWithAliasForKeyAndBuilderForValue()
     {
     }
 
     @Test
-    public void putUsingBuilder1()
+    public void putWithBuilder1()
     {
     }
 
     @Test
-    public void putUsingAliasForKeyAndBuilderForValue1()
+    public void putWithAliasForKeyAndBuilderForValue1()
     {
     }
 
     @Test
-    public void putUsingBuilder2()
+    public void putWithBuilder2()
     {
     }
 
     @Test
-    public void putUsingAliasForKeyAndBuilderForValue2()
+    public void putWithAliasForKeyAndBuilderForValue2()
     {
     }
 
@@ -372,12 +372,7 @@ public class BuilderTest
     }
 
     @Test
-    public void putUsingAliasForKeyAndBuilderForValue3()
-    {
-    }
-
-    @Test
-    public void as()
+    public void putWithAliasForKeyAndBuilderForValue3()
     {
     }
 

@@ -22,24 +22,24 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<Argument, Value> function
     );
 
-    <Value> GenericBuilder setUsingAlias(
+    <Value> GenericBuilder setWithAlias(
             BiConsumer<Type, Value> consumer,
             String alias
     );
 
-    <Alias, Value> GenericBuilder setUsingAlias(
+    <Alias, Value> GenericBuilder setWithAlias(
             BiConsumer<Type, Value> consumer,
             Class<Alias> aliasType,
             String alias,
             Function<Alias, Value> function
     );
 
-    <NewType, Value, NewBuilder extends FluentBuilder<NewType, NewBuilder>> NewBuilder setUsingBuilder(
+    <NewType, Value, NewBuilder extends FluentBuilder<NewType, NewBuilder>> NewBuilder setWithBuilder(
             BiConsumer<Type, Value> consumer,
             NewBuilder builder
     );
 
-    <NewType, Value, NewBuilder extends FluentBuilder<NewType, NewBuilder>> NewBuilder setUsingBuilder(
+    <NewType, Value, NewBuilder extends FluentBuilder<NewType, NewBuilder>> NewBuilder setWithBuilder(
             BiConsumer<Type, Value> consumer,
             NewBuilder builder,
             Function<NewType, Value> function
@@ -68,24 +68,24 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<Argument, ListOrSet> function
     );
 
-    <Item, ListOrSet extends Collection<Item>> GenericBuilder addUsingAlias(
+    <Item, ListOrSet extends Collection<Item>> GenericBuilder addWithAlias(
             Function<Type, ListOrSet> collectionGetter,
             String alias
     );
 
-    <Alias, Item, ListOrSet extends Collection<Item>> GenericBuilder addUsingAlias(
+    <Alias, Item, ListOrSet extends Collection<Item>> GenericBuilder addWithAlias(
             Function<Type, ListOrSet> collectionGetter,
             Class<Alias> aliasType,
             String alias,
             Function<Alias, Item> function
     );
 
-    <Item, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder addUsingBuilder(
+    <Item, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder addWithBuilder(
             Function<Type, ListOrSet> collectionGetter,
             NewBuilder builder
     );
 
-    <Item, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder addUsingBuilder(
+    <Item, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder addWithBuilder(
             Function<Type, ListOrSet> collectionGetter,
             NewBuilder builder,
             Function<Type, Item> function
@@ -98,19 +98,19 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Value value
     );
 
-    <Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliases(
+    <Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             String keyAlias,
             String valueAlias
     );
 
-    <Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForKey(
+    <Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForKey(
             Function<Type, MapType> mapGetter,
             String keyAlias,
             Value value
     );
 
-    <Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForValue(
+    <Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForValue(
             Function<Type, MapType> mapGetter,
             Key key,
             String valueAlias
@@ -123,7 +123,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Value value
     );
 
-    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliases(
+    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
             String keyAlias,
@@ -131,7 +131,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             String valueAlias
     );
 
-    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForKey(
+    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForKey(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
             String keyAlias,
@@ -139,7 +139,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Value value
     );
 
-    <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForValue(
+    <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForValue(
             Function<Type, MapType> mapGetter,
             Argument keyArgument,
             Function<Argument, Key> keyFunction,
@@ -153,7 +153,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<Argument, Value> valueFunction
     );
 
-    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliases(
+    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             String keyAlias,
             Class<Alias> valueAliasType,
@@ -161,14 +161,14 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<Alias, Value> valueFunction
     );
 
-    <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForKey(
+    <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForKey(
             Function<Type, MapType> mapGetter,
             String keyAlias,
             Argument valueArgument,
             Function<Argument, Value> valueFunction
     );
 
-    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForValue(
+    <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForValue(
             Function<Type, MapType> mapGetter,
             Key key,
             Class<Alias> valueAliasType,
@@ -184,7 +184,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<ValueArgument, Value> valueFunction
     );
 
-    <KeyAlias, ValueAlias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliases(
+    <KeyAlias, ValueAlias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             Class<KeyAlias> keyAliasType,
             String keyAlias,
@@ -194,7 +194,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<ValueAlias, Value> valueFunction
     );
 
-    <Alias, ValueArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForKey(
+    <Alias, ValueArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForKey(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
             String keyAlias,
@@ -203,7 +203,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<ValueArgument, Value> valueFunction
     );
 
-    <Alias, KeyArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putUsingAliasForValue(
+    <Alias, KeyArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForValue(
             Function<Type, MapType> mapGetter,
             KeyArgument keyArgument,
             Function<KeyArgument, Key> keyFunction,
@@ -218,26 +218,26 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
     );
     
     // map with builders
-    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingBuilder(
+    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithBuilder(
             Function<Type, MapType> mapGetter,
             Key key,
             NewBuilder builder
     );
 
-    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingAliasForKeyAndBuilderForValue(
+    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithAliasForKeyAndBuilderForValue(
             Function<Type, MapType> mapGetter,
             String keyAlias,
             NewBuilder builder
     );
 
-    <Item, Argument, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingBuilder(
+    <Item, Argument, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithBuilder(
             Function<Type, MapType> mapGetter,
             Argument keyArgument,
             Function<Argument, Key> keyFunction,
             NewBuilder builder
     );
 
-    <Item, Alias, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingAliasForKeyAndBuilderForValue(
+    <Item, Alias, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithAliasForKeyAndBuilderForValue(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
             String keyAlias,
@@ -245,14 +245,14 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             NewBuilder builder
     );
 
-    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingBuilder(
+    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithBuilder(
             Function<Type, MapType> mapGetter,
             Key key,
             NewBuilder valueBuilder,
             Function<Item, Value> valueFunction
     );
 
-    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingAliasForKeyAndBuilderForValue(
+    <Item, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithAliasForKeyAndBuilderForValue(
             Function<Type, MapType> mapGetter,
             String keyAlias,
             NewBuilder valueBuilder,
@@ -267,7 +267,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<Item, Value> valueFunction
     );
 
-    <Item, Alias, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putUsingAliasForKeyAndBuilderForValue(
+    <Item, Alias, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithAliasForKeyAndBuilderForValue(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
             String keyAlias,

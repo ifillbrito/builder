@@ -53,7 +53,7 @@ public class BuilderTest
                 .as("bob")
                 .set(Person::setName, "Bob")
                 .set(Person::setLastName, "Smith")
-                .setUsingAlias(Person::setPartner, "bob")
+                .setWithAlias(Person::setPartner, "bob")
                 .build();
 
         // then
@@ -69,7 +69,7 @@ public class BuilderTest
                 .as("bob")
                 .set(Person::setName, "Bob")
                 .set(Person::setLastName, "Smith")
-                .setUsingAlias(Person::setPartner, Person.class, "bob", p -> {
+                .setWithAlias(Person::setPartner, Person.class, "bob", p -> {
                     Person ana = new Person();
                     ana.setName("Anna");
                     ana.setLastName(p.getLastName());
@@ -97,10 +97,10 @@ public class BuilderTest
                 .as("bob")
                 .set(Person::setName, "Bob")
                 .set(Person::setLastName, "Smith")
-                .setUsingBuilder(Person::setPartner, Builder.of(new Person()))
+                .setWithBuilder(Person::setPartner, Builder.of(new Person()))
                     .set(Person::setName, "Anna")
                     .set(Person::setLastName, "Smith")
-                    .setUsingBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
+                    .setWithBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
                         .set(ContactInformation::setTelephoneNumbers, telephoneNumbers)
                         .toParent(Person.class)
                     .toParent(Person.class)
@@ -122,7 +122,7 @@ public class BuilderTest
         Person bob = Builder.of(new Person())
                 .as("bob")
                 .set(Person::setName, "Bob")
-                .setUsingBuilder(Person::setLastName, Builder.of(new Person()), Person::getLastName)
+                .setWithBuilder(Person::setLastName, Builder.of(new Person()), Person::getLastName)
                     .set(Person::setLastName, "Smith")
                     .toParent(Person.class)
                 .build();
@@ -226,17 +226,17 @@ public class BuilderTest
     }
 
     @Test
-    public void addUsingBuilder_GetterAndBuilder_positive()
+    public void addWithBuilder_GetterAndBuilder_positive()
     {
         // when
         //@formatter:off
         Person bob = Builder.of(new Person())
                 .set(Person::setName, "Bob").as("bob")
                 .set(Person::setChildren, new ArrayList<>())
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Anna")
                     .toParent(Person.class)
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Mary")
                     .toParent(Person.class)
                 .build();
@@ -249,7 +249,7 @@ public class BuilderTest
     }
 
     @Test
-    public void addUsingBuilder_GetterAndBuilderAndFunction_positive()
+    public void addWithBuilder_GetterAndBuilderAndFunction_positive()
     {
         // when
         Function<Person, Person> upperCaseName = p -> {
@@ -261,10 +261,10 @@ public class BuilderTest
         Person bob = Builder.of(new Person())
                 .set(Person::setName, "Bob").as("bob")
                 .set(Person::setChildren, new ArrayList<>())
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()), upperCaseName)
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()), upperCaseName)
                     .set(Person::setName, "Anna")
                     .toParent(Person.class)
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()), upperCaseName)
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()), upperCaseName)
                     .set(Person::setName, "Mary")
                     .toParent(Person.class)
                 .build();
@@ -277,24 +277,24 @@ public class BuilderTest
     }
 
     @Test
-    public void addUsingAlias_GetterAndAlias_positive()
+    public void addWithAlias_GetterAndAlias_positive()
     {
         // when
         //@formatter:off
         Person bob = Builder.of(new Person())
                 .set(Person::setName, "Bob").as("bob")
                 .set(Person::setChildren, new ArrayList<>())
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Anna").as("anna")
                     .toParent(Person.class)
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Mary").as("mary")
                     .toParent(Person.class)
-                .setUsingBuilder(Person::setPartner, Builder.of(new Person()))
+                .setWithBuilder(Person::setPartner, Builder.of(new Person()))
                     .set(Person::setName, "Laura")
                     .set(Person::setChildren, new ArrayList<>())
-                    .addUsingAlias(Person::getChildren, "anna")
-                    .addUsingAlias(Person::getChildren, "mary")
+                    .addWithAlias(Person::getChildren, "anna")
+                    .addWithAlias(Person::getChildren, "mary")
                     .toParent(Person.class)
                 .build();
         //@formatter:on
@@ -306,7 +306,7 @@ public class BuilderTest
     }
 
     @Test
-    public void addUsingAlias_GetterAndAliasAndFunction_positive()
+    public void addWithAlias_GetterAndAliasAndFunction_positive()
     {
         // when
         Function<Person, Person> upperCaseName = p -> {
@@ -318,17 +318,17 @@ public class BuilderTest
         Person bob = Builder.of(new Person())
                 .set(Person::setName, "Bob").as("bob")
                 .set(Person::setChildren, new ArrayList<>())
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Anna").as("anna")
                     .toParent(Person.class)
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Mary").as("mary")
                     .toParent(Person.class)
-                .setUsingBuilder(Person::setPartner, Builder.of(new Person()))
+                .setWithBuilder(Person::setPartner, Builder.of(new Person()))
                     .set(Person::setName, "Laura")
                     .set(Person::setChildren, new ArrayList<>())
-                    .addUsingAlias(Person::getChildren, Person.class, "anna", upperCaseName)
-                    .addUsingAlias(Person::getChildren, Person.class, "mary", upperCaseName)
+                    .addWithAlias(Person::getChildren, Person.class, "anna", upperCaseName)
+                    .addWithAlias(Person::getChildren, Person.class, "mary", upperCaseName)
                     .toParent(Person.class)
                 .build();
         //@formatter:on
@@ -361,7 +361,7 @@ public class BuilderTest
         //@formatter:off
         ContactInformation info = Builder.of(new ContactInformation())
                 .set(ContactInformation::setAddresses, new HashMap<>())
-                .putUsingBuilder(ContactInformation::getAddresses, "home", Builder.of(new Address()))
+                .putWithBuilder(ContactInformation::getAddresses, "home", Builder.of(new Address()))
                     .set(Address::setCity, "Frankfurt")
                     .set(Address::setCountry, "Germany")
                     .toParent(ContactInformation.class)
@@ -384,14 +384,14 @@ public class BuilderTest
                 .set(Person::setName, "Bob").as("bob")
                 .set(Person::setLastName, "Smith")
                 // add object ContactInformation to Person
-                .setUsingBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
+                .setWithBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
                     .as("bob-contact-info")
                     .set(ContactInformation::setTelephoneNumbers, new HashMap<>())
                     .put(ContactInformation::getTelephoneNumbers, "home", "11-111-1111")
                     // setup the map for addresses
                     .set(ContactInformation::setAddresses, new HashMap<>())
                     // put Address in the correspondng ContactInformation Map
-                    .putUsingBuilder(ContactInformation::getAddresses, "home", Builder.of(new Address()))
+                    .putWithBuilder(ContactInformation::getAddresses, "home", Builder.of(new Address()))
                         .set(Address::setCity, "Frankfurt")
                         .set(Address::setCountry, "Germany")
                         .as("bob-home-address")
@@ -400,15 +400,15 @@ public class BuilderTest
                 // setup the list for children
                 .set(Person::setChildren, new ArrayList<>())
                 // add a child (Person) to Person
-                .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
+                .addWithBuilder(Person::getChildren, Builder.of(new Person()))
                     .set(Person::setName, "Anna").as("anna")
                     // use Bob's last name
-                    .setUsingAlias(Person::setLastName, Person.class, "bob", Person::getLastName)
+                    .setWithAlias(Person::setLastName, Person.class, "bob", Person::getLastName)
                     // add object ContactInformation to Person
-                    .setUsingBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
+                    .setWithBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
                         .set(ContactInformation::setAddresses, new HashMap<>())
                         // use Bob's address
-                        .putUsingAliasForValue(ContactInformation::getAddresses, "home", "bob-home-address")
+                        .putWithAliasForValue(ContactInformation::getAddresses, "home", "bob-home-address")
                         .toParent(Person.class)
                     .toParent(Person.class)
                 .getAliasMap();
