@@ -38,6 +38,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
+        if ( consumer == null ) throw new IllegalArgumentException("The setter cannot be null.");
         consumer.accept(object, value);
         return (GenericBuilder) this;
     }
@@ -49,6 +50,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Argument, Value> function
     )
     {
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         return set(consumer, function.apply(argument));
     }
 
@@ -58,7 +60,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String alias
     )
     {
-        return set(consumer, (Value) aliasMap.get(alias));
+        Value value = (Value) aliasMap.get(alias);
+        if ( value == null )
+            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        return set(consumer, value);
     }
 
     @Override
@@ -69,7 +74,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Value> function
     )
     {
-        return set(consumer, function.apply((Alias) aliasMap.get(alias)));
+        Alias argument = (Alias) aliasMap.get(alias);
+        return set(consumer, argument, function);
     }
 
     @Override
