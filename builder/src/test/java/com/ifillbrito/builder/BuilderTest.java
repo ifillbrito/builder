@@ -2,6 +2,9 @@ package com.ifillbrito.builder;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 /**
@@ -202,18 +205,88 @@ public class BuilderTest
     }
 
     @Test
-    public void setWithBuilder()
+    public void setWithBuilder_setterAndBuilder()
     {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .set(ObjectB::setText, "object B")
+                    .toParent(ObjectA.class) // use this to tell the compiler the parent type
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .set(ObjectA::setText, "object A")
+                    .toParent() // use this if the parent type is the same as the child type
+                .build();
+        //@formatter:on
+
+        assertEquals("object A", objectA.getObjectA().getText());
+        assertEquals("object B", objectA.getObjectB().getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setWithBuilder_nullSetterAndBuilder_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(null, Builder.of(new ObjectB()))
+                    .set(ObjectB::setText, "object B")
+                    .toParent(ObjectA.class)
+                .build();
+        //@formatter:on
     }
 
     @Test
-    public void setWithBuilder1()
+    public void setWithBuilder_setterAndBuilderAndFunction()
     {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setText, Builder.of(new ObjectB()), ObjectB::getText)
+                    .set(ObjectB::setText, "object B")
+                    .toParent(ObjectA.class)
+                .build();
+        //@formatter:on
+
+        assertEquals("object B", objectA.getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setWithBuilder_setterAndBuilderAndNullFunction_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setText, Builder.of(new ObjectB()), null)
+                    .set(ObjectB::setText, "object B")
+                    .toParent(ObjectA.class)
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void setWithBuilder_noParent_exception()
+    {
+        // This builder has no parent.
+        Builder.of(new ObjectA()).toParent();
     }
 
     @Test
-    public void add()
+    public void add_letters()
     {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .add(ObjectA::getList, "A")
+                .add(ObjectA::getList, "B")
+                .add(ObjectA::getList, "C")
+                .add(ObjectA::getList, "D")
+                .build();
+
+        assertEquals(4, objectA.getList().size());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void add_toNullList_exception()
+    {
+        Builder.of(new ObjectA())
+                .add(ObjectA::getList, "A")
+                .build();
     }
 
     @Test

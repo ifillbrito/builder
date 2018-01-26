@@ -30,6 +30,15 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         this.object = object;
     }
 
+    private ParentSetterType parentSetterType;
+
+    private enum ParentSetterType
+    {
+        OBJECT,
+        COLLECTION,
+        MAP
+    }
+
 
     // Setting Simple Fields
     @Override
@@ -88,6 +97,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
         newBuilder.parentConsumer = consumer;
+        newBuilder.parentSetterType = ParentSetterType.OBJECT;
         newBuilder.parentObject = object;
         return (NewBuilder) newBuilder;
     }
@@ -99,6 +109,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<NewType, Value> function
     )
     {
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         BaseBuilder newBuilder = (BaseBuilder) setWithBuilder(consumer, builder);
         newBuilder.parentFunctionForConsumer = function;
         return (NewBuilder) newBuilder;
@@ -112,6 +123,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         ListOrSet targetCollection = collectionGetter.apply(object);
+        if (targetCollection == null) throw new NullPointerException("The target collection is null.");
         targetCollection.add(value);
         return (GenericBuilder) this;
     }
@@ -181,6 +193,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
         newBuilder.parentCollection = collectionGetter.apply(object);
+        newBuilder.parentSetterType = ParentSetterType.COLLECTION;
         return (NewBuilder) newBuilder;
     }
 
@@ -404,6 +417,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
         newBuilder.parentMap = mapGetter.apply(object);
+        newBuilder.parentSetterType = ParentSetterType.MAP;
         newBuilder.parentKey = key;
         return (NewBuilder) newBuilder;
     }
@@ -503,58 +517,43 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         return (GenericBuilder) this;
     }
 
+    public GenericBuilder toParent()
+    {
+        return toParent((Class<Type>) object.getClass());
+    }
+
     @Override
     public <T, ParentBuilder extends FluentBuilder<T, ParentBuilder>> ParentBuilder toParent(Class<T> type)
     {
-        if ( parent == null )
+        if ( parent == null ) throw new UnsupportedOperationException("No parent has been defined for this builder");
+        switch ( parentSetterType )
         {
-            throw new UnsupportedOperationException("No parent has been defined for this builder");
+            case OBJECT:
+                if ( parentConsumer == null )
+                    throw new IllegalArgumentException("The setter of the parent builder cannot be null.");
+                if ( parentFunctionForConsumer == null ) parentConsumer.accept(parentObject, object);
+                else parentConsumer.accept(parentObject, parentFunctionForConsumer.apply(object));
+                return (ParentBuilder) parent;
+
+            case COLLECTION:
+                if ( parentCollection == null )
+                    throw new IllegalArgumentException("The collection getter of the parent builder cannot be null.");
+                if ( parentFunctionForConsumer == null ) parentCollection.add(object);
+                else parentCollection.add(parentFunctionForConsumer.apply(object));
+                return (ParentBuilder) parent;
+            case MAP:
+                if ( parentMap == null )
+                    throw new IllegalArgumentException("The map getter of the parent builder cannot be null.");
+                if ( parentFunctionForMapKey == null && parentFunctionForMapValue == null )
+                    parentMap.put(parentKey, object);
+                else if ( parentFunctionForMapKey != null && parentFunctionForMapValue == null )
+                    parentMap.put(parentFunctionForMapKey.apply(parentKey), object);
+                else if ( parentFunctionForMapKey == null )
+                    parentMap.put(parentKey, parentFunctionForMapValue.apply(object));
+                else parentMap.put(parentFunctionForMapKey.apply(parentKey), parentFunctionForMapValue.apply(object));
+                return (ParentBuilder) parent;
         }
-        if ( parentConsumer != null )
-        {
-            if ( parentFunctionForConsumer == null )
-            {
-                parentConsumer.accept(parentObject, object);
-            }
-            else
-            {
-                parentConsumer.accept(parentObject, parentFunctionForConsumer.apply(object));
-            }
-            return (ParentBuilder) parent;
-        }
-        if ( parentCollection != null )
-        {
-            if ( parentFunctionForConsumer == null )
-            {
-                parentCollection.add(object);
-            }
-            else
-            {
-                parentCollection.add(parentFunctionForConsumer.apply(object));
-            }
-            return (ParentBuilder) parent;
-        }
-        if ( parentMap != null )
-        {
-            if ( parentFunctionForMapKey == null && parentFunctionForMapValue == null )
-            {
-                parentMap.put(parentKey, object);
-            }
-            else if ( parentFunctionForMapKey != null && parentFunctionForMapValue == null )
-            {
-                parentMap.put(parentFunctionForMapKey.apply(parentKey), object);
-            }
-            else if ( parentFunctionForMapKey == null )
-            {
-                parentMap.put(parentKey, parentFunctionForMapValue.apply(object));
-            }
-            else
-            {
-                parentMap.put(parentFunctionForMapKey.apply(parentKey), parentFunctionForMapValue.apply(object));
-            }
-            return (ParentBuilder) parent;
-        }
-        throw new NullPointerException("The collection or map getter for " + object.getClass().getCanonicalName() + " returns null");
+        throw new RuntimeException("[Internal Error] No parentSetterType was defined.");
     }
 
     @Override
