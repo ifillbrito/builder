@@ -1,5 +1,6 @@
 package com.ifillbrito.builder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ public class ObjectA
     private ObjectB objectB;
     private ObjectA objectA;
     private List<String> list;
+    private List<ObjectA> objectList = new ArrayList<>();
 
     public String getText()
     {
@@ -61,5 +63,15 @@ public class ObjectA
     public void setList(List<String> list)
     {
         this.list = list;
+    }
+
+    public List<ObjectA> getObjectList()
+    {
+        return objectList;
+    }
+
+    public void setObjectList(List<ObjectA> objectList)
+    {
+        this.objectList = objectList;
     }
 }

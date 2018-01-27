@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -268,7 +269,7 @@ public class BuilderTest
     }
 
     @Test
-    public void add_letters()
+    public void add_getterAndValue()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
@@ -289,29 +290,196 @@ public class BuilderTest
                 .build();
     }
 
-    @Test
-    public void add1()
+    @Test(expected = IllegalArgumentException.class)
+    public void add_nullGetterAndValue_exception()
     {
+        Builder.of(new ObjectA())
+                .add(null, "A")
+                .build();
     }
 
     @Test
-    public void addAll()
+    public void add_getterAndValueAndFunction()
     {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .add(ObjectA::getList, "A", String::toLowerCase)
+                .build();
+
+        assertEquals("a", objectA.getList().get(0));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void add_getterAndValueAndFunctionToNullList_exception()
+    {
+        Builder.of(new ObjectA())
+                .add(ObjectA::getList, "A", String::toLowerCase)
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void add_nullGetterValueAndFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .add(null, "A", String::toLowerCase)
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void add_getterValueAndNullFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .add(ObjectA::getList, "A", null)
+                .build();
     }
 
     @Test
-    public void addAll1()
+    public void addAll_getterAndList()
     {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addAll(ObjectA::getList, Arrays.asList("A", "B", "C"))
+                .build();
+
+        assertEquals(3, objectA.getList().size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addAll_nullGetterAndList_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addAll(null, Arrays.asList("A", "B", "C"))
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addAll_getterAndNullList_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addAll(ObjectA::getList, null)
+                .build();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addAll_getterAndListToNullList_exception()
+    {
+        Builder.of(new ObjectA())
+                .addAll(ObjectA::getList, Arrays.asList("A", "B", "C"))
+                .build();
     }
 
     @Test
-    public void addWithAlias()
+    public void addAll_getterAndValueAndFunction()
     {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addAll(ObjectA::getList,
+                        Arrays.asList(1, 2, 3),
+                        list -> list
+                                .stream()
+                                .map(String::valueOf)
+                                .collect(Collectors.toList()))
+                .build();
+
+        assertEquals(3, objectA.getList().size());
+        assertEquals("1", objectA.getList().get(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addAll_nullGetterAndValueAndFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addAll(null,
+                        Arrays.asList(1, 2, 3),
+                        list -> list
+                                .stream()
+                                .map(String::valueOf)
+                                .collect(Collectors.toList()))
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addAll_getterAndValueAndNullFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addAll(ObjectA::getList, Arrays.asList(1, 2, 3), null)
+                .build();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addAll_getterAndValueAndFunctionToNullList_exception()
+    {
+        Builder.of(new ObjectA())
+                .addAll(ObjectA::getList,
+                        Arrays.asList(1, 2, 3),
+                        list -> list
+                                .stream()
+                                .map(String::valueOf)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
     @Test
-    public void addWithAlias1()
+    public void addWithAlias_getterAndAlias()
     {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .as("a")
+                .set(ObjectA::setText, "object a")
+                .addWithAlias(ObjectA::getObjectList, "a")
+                .build();
+
+        assertEquals("object a", objectA.getObjectList().get(0).getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithAlias_getterAndNonDefinedAlias_exception()
+    {
+        Builder.of(new ObjectA())
+                .as("a")
+                .set(ObjectA::setText, "object a")
+                .addWithAlias(ObjectA::getObjectList, "b")
+                .build();
+    }
+
+    @Test
+    public void addWithAlias_getterAndAliasAndFunction()
+    {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .as("a")
+                .set(ObjectA::setText, "object a")
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithAlias(ObjectA::getList, ObjectA.class, "a", ObjectA::getText)
+                .build();
+
+        assertEquals("object a", objectA.getList().get(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithAlias_getterAndNonDefinedAliasAndFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .as("a")
+                .set(ObjectA::setText, "object a")
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithAlias(ObjectA::getList, ObjectA.class, "b", ObjectA::getText)
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithAlias_getterAndAliasAndNullFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .as("a")
+                .set(ObjectA::setText, "object a")
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithAlias(ObjectA::getList, ObjectA.class, "a", null)
+                .build();
     }
 
     @Test

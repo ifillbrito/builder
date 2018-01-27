@@ -84,6 +84,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         Alias argument = (Alias) aliasMap.get(alias);
+        if ( argument == null )
+            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
         return set(consumer, argument, function);
     }
 
@@ -122,8 +124,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Item value
     )
     {
+        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
         ListOrSet targetCollection = collectionGetter.apply(object);
-        if (targetCollection == null) throw new NullPointerException("The target collection is null.");
+        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
         targetCollection.add(value);
         return (GenericBuilder) this;
     }
@@ -135,7 +138,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Argument, Item> function
     )
     {
+        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         ListOrSet targetCollection = collectionGetter.apply(object);
+        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
         targetCollection.add(function.apply(argument));
         return (GenericBuilder) this;
     }
@@ -146,8 +152,11 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             ListOrSet collection
     )
     {
-        ListOrSet aCollection = collectionGetter.apply(object);
-        aCollection.addAll(collection);
+        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        if ( collection == null ) throw new IllegalArgumentException("The collection cannot be null.");
+        ListOrSet targetCollection = collectionGetter.apply(object);
+        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
+        targetCollection.addAll(collection);
         return (GenericBuilder) this;
     }
 
@@ -158,7 +167,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Argument, ListOrSet> function
     )
     {
+        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         ListOrSet targetCollection = collectionGetter.apply(object);
+        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
         targetCollection.addAll(function.apply(argument));
         return (GenericBuilder) this;
     }
@@ -169,7 +181,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String alias
     )
     {
-        return add(collectionGetter, (Item) aliasMap.get(alias));
+        Item item = (Item) aliasMap.get(alias);
+        if ( item == null )
+            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        return add(collectionGetter, item);
     }
 
     @Override
@@ -180,7 +195,11 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Item> function
     )
     {
-        return add(collectionGetter, function.apply((Alias) aliasMap.get(alias)));
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
+        Alias targetObject = (Alias) aliasMap.get(alias);
+        if ( targetObject == null )
+            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        return add(collectionGetter, function.apply(targetObject));
     }
 
     @Override
