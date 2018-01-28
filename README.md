@@ -1,44 +1,140 @@
-# Fluent Generic Builder [Prototype]
+This project provides a generic fluent builder that can be used as it is for any object. However, it is recommended to extend the ``BaseBuilder`` class to assign more appropiate names to the builder methods and improve the code readability. The builder uses method reference to setup the values in the target object.
 
-This project provides a generic fluent builder that can be used for any object. The builder uses method reference to setup the values in the target object, so that reflection is not necessary.
+## Features
+- Fluent
+- Internal References (aliases)
+- Functions can be applied to internal builders
+- Support for adding elements to collections and maps
+
+For more details about how these features work, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/blob/master/builder/src/test/java/com/ifillbrito/builder/BuilderTest.java'>unit tests</a>. The unit tests use a generic builder. Consider extending the class ``BaseBuilder`` to improve code readability.
 
 ## Example:
+In the following example we show how to build a basic object using three approaches:
+1. Without using builder
+2. Using the generic builder
+3. Using a specific builder (extends the generic ``BaseBuilder``)
+
+The object to be built looks as follows:
+````
+main object     [text=main,         number=0]
+    child       [text=child A1,     number=1]
+        child   [text=child B11,    flag=true]
+        child   [text=child B12,    flag=false]
+    child       [text=child A2,     number=2]
+        child   [text=child B21,    flag=true]
+    child       [text=child A3,     number=3]
+````
+
+### Without using Builders
 ```java
-Person person = Builder.of(new Person())
-    .set(Person::setName, "Bob").as("bob")
-    .set(Person::setLastName, "Smith")
-    // add object ContactInformation to Person
-    .setUsingBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
-        .as("bob-contact-info")
-        .set(ContactInformation::setTelephoneNumbers, new HashMap<>())
-        .put(ContactInformation::getTelephoneNumbers, "home", "11-111-1111")
-        // setup the map for addresses
-        .set(ContactInformation::setAddresses, new HashMap<>())
-        // put Address in the correspondng ContactInformation Map
-        .putUsingBuilder(ContactInformation::getAddresses, "home", Builder.of(new Address()))
-            .set(Address::setCity, "Frankfurt")
-            .set(Address::setCountry, "Germany")
-            .as("bob-home-address")
-            .toParent(ContactInformation.class)
-        .toParent(Person.class)
-    // setup the list for children
-    .set(Person::setChildren, new ArrayList<>())
-    // add a child (Person) to Person
-    .addUsingBuilder(Person::getChildren, Builder.of(new Person()))
-        .set(Person::setName, "Anna").as("anna")
-        // use Bob's last name
-        .setUsingAlias(Person::setLastName, Person.class, "bob", Person::getLastName)
-        // add object ContactInformation to Person
-        .setUsingBuilder(Person::setContactInformation, Builder.of(new ContactInformation()))
-            .set(ContactInformation::setAddresses, new HashMap<>())
-            // use Bob's address
-            .putUsingAliasForValue(ContactInformation::getAddresses, "home", "bob-home-address")
-            .toParent(Person.class)
-        .toParent(Person.class)
-    .build();
+ObjectA main = new ObjectA();
+main.setText("main");
+main.setNumber(0);
+
+List<ObjectA> objectsA = new ArrayList<>();
+main.setObjectsA(objectsA);
+ObjectA childA1 = new ObjectA();
+objectsA.add(childA1);
+childA1.setText("child A1");
+childA1.setNumber(1);
+
+List<ObjectB> objectsB1 = new ArrayList<>();
+childA1.setObjectsB(objectsB1);
+ObjectB childB11 = new ObjectB();
+objectsB1.add(childB11);
+childB11.setText("child B11");
+childB11.setFlag(true);
+
+ObjectB childB12 = new ObjectB();
+objectsB1.add(childB12);
+childB12.setText("child B12");
+childB12.setFlag(false);
+
+ObjectA childA2 = new ObjectA();
+objectsA.add(childA2);
+childA2.setText("child A2");
+childA2.setNumber(2);
+
+List<ObjectB> objectsB2 = new ArrayList<>();
+childA2.setObjectsB(objectsB2);
+ObjectB childB21 = new ObjectB();
+objectsB2.add(childB21);
+childB21.setText("child B21");
+childB21.setFlag(true);
+
+ObjectA childA3 = new ObjectA();
+objectsA.add(childA3);
+childA3.setText("child A3");
+childA3.setNumber(3);
 ``` 
 
-For further examples take a look at the <a href='https://github.com/ifillbrito/fluent-builder/blob/master/builder/src/test/java/com/ifillbrito/buildertest/BuilderTest.java'>unit tests</a>.
+### Using the Generic Builder
+````java
+ObjectA main = Builder.of(new ObjectA())
+    .set(ObjectA::setText, "main")
+    .set(ObjectA::setNumber, 0)
+    .set(ObjectA::setObjectsA, new ArrayList<>())
+    .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
+        .set(ObjectA::setText, "child A1")
+        .set(ObjectA::setNumber, 1)
+        .set(ObjectA::setObjectsB, new ArrayList<>())
+        .addWithBuilder(ObjectA::getObjectsB, Builder.of(new ObjectB()))
+            .set(ObjectB::setText, "child B11")
+            .set(ObjectB::setFlag, true)
+            .toParent(ObjectA.class)
+        .addWithBuilder(ObjectA::getObjectsB, Builder.of(new ObjectB()))
+            .set(ObjectB::setText, "child B12")
+            .set(ObjectB::setFlag, false)
+            .toParent(ObjectA.class)
+        .toParent(ObjectA.class)
+    .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
+        .set(ObjectA::setText, "child A2")
+        .set(ObjectA::setNumber, 2)
+        .addWithBuilder(ObjectA::getObjectsB, Builder.of(new ObjectB()))
+            .set(ObjectB::setText, "child B21")
+            .set(ObjectB::setFlag, true)
+            .toParent(ObjectA.class)
+        .toParent(ObjectA.class)
+    .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
+        .set(ObjectA::setText, "child A3")
+        .set(ObjectA::setNumber, 3)
+        .toParent()
+    .build();
+````
+
+### Using the Specific Builder (extends ``BaseBuilder``)
+````java
+ObjectA main = MyBuilderA.of(new ObjectA())
+    .withText("main")
+    .withNumber(0)
+    .addObjectA()
+        .withText("child A1")
+        .withNumber(1)
+        .addObjectB()
+            .withText("child B11")
+            .withFlag(true)
+            .toObjectA()
+        .addObjectB()
+            .withText("child B12")
+            .withFlag(false)
+            .toObjectA()
+        .toObjectA()
+    .addObjectA()
+        .withText("child A2")
+        .withNumber(2)
+        .addObjectB()
+            .withText("child B21")
+            .withFlag(true)
+            .toObjectA()
+        .toObjectA()
+    .addObjectA()
+        .withText("child A3")
+        .withNumber(3)
+        .toObjectA()
+    .build();
+````
+
+For further details about ``MyBuilderA`` and ``MyBuilderB`` take a look at these <a href='https://github.com/ifillbrito/fluent-builder/tree/master/builder/src/test/java/com/ifillbrito/example'>files</a>.
 
 ## License
 
