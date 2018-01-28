@@ -483,13 +483,110 @@ public class BuilderTest
     }
 
     @Test
-    public void addWithBuilder()
+    public void addWithBuilder_getterAndBuilder()
     {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .addWithBuilder(ObjectA::getObjectList, Builder.of(new ObjectA()))
+                    .set(ObjectA::setText, "child 1")
+                    .toParent()
+                .addWithBuilder(ObjectA::getObjectList, Builder.of(new ObjectA()))
+                    .set(ObjectA::setText, "child 2")
+                    .toParent()
+                .build();
+        //@formatter:on
+
+        assertEquals("child 1", objectA.getObjectList().get(0).getText());
+        assertEquals("child 2", objectA.getObjectList().get(1).getText());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void addWithBuilder_getterAndBuilder_exception()
+    {
+        Builder.of(new ObjectA())
+                .addWithBuilder(ObjectA::getObjectList, Builder.of(new ObjectA()))
+                .set(ObjectA::setText, "child 1")
+                .build(); // build() not allowed here. toParent() must be called.
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithBuilder_nullGetterAndBuilder_exception()
+    {
+        Builder.of(new ObjectA())
+                .addWithBuilder(null, Builder.of(new ObjectA()));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithBuilder_getterAndNullBuilder_exception()
+    {
+        Builder.of(new ObjectA())
+                .addWithBuilder(ObjectA::getObjectList, null);
     }
 
     @Test
-    public void addWithBuilder1()
+    public void addWithBuilder_getterAndBuilderAndFunction()
     {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithBuilder(ObjectA::getList, Builder.of(new ObjectA()), ObjectA::getText)
+                    .set(ObjectA::setText, "child 1")
+                    .toParent()
+                .build();
+        //@formatter:on
+
+        assertEquals("child 1", objectA.getList().get(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithBuilder_getterAndBuilderAndNullFunction_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithBuilder(ObjectA::getList, Builder.of(new ObjectA()), null)
+                    .set(ObjectA::setText, "child 1")
+                    .toParent()
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithBuilder_getterAndNullBuilderAndFunction_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithBuilder(ObjectA::getList, null, ObjectA::getText)
+                    .set(ObjectA::setText, "child 1")
+                    .toParent(ObjectA.class)
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addWithBuilder_nullGetterAndBuilderAndFunction_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .set(ObjectA::setList, new ArrayList<>())
+                .addWithBuilder(null, Builder.of(new ObjectA()), ObjectA::getText)
+                    .set(ObjectA::setText, "child 1")
+                    .toParent()
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addWithBuilder_getterAndBuilderAndFunctionIntoNullList_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .addWithBuilder(ObjectA::getList, Builder.of(new ObjectA()), ObjectA::getText)
+                    .set(ObjectA::setText, "child 1")
+                    .toParent()
+                .build();
+        //@formatter:on
     }
 
     @Test

@@ -208,6 +208,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             NewBuilder builder
     )
     {
+        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        if ( builder == null ) throw new IllegalArgumentException("The builder cannot be null.");
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
@@ -217,14 +219,23 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <Item, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder addWithBuilder(
+    public <Item, BuilderType, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<BuilderType, NewBuilder>> NewBuilder addWithBuilder(
             Function<Type, ListOrSet> collectionGetter,
             NewBuilder builder,
-            Function<Type, Item> function
+            Function<BuilderType, Item> function
     )
     {
-        BaseBuilder newBuilder = (BaseBuilder) addWithBuilder(collectionGetter, builder);
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
+        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        if ( builder == null ) throw new IllegalArgumentException("The builder cannot be null.");
+        BaseBuilder newBuilder = (BaseBuilder) builder;
+        newBuilder.parent = this;
+        ListOrSet targetCollection = collectionGetter.apply(object);
+        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
+        newBuilder.parentCollection = targetCollection;
+        newBuilder.aliasMap = aliasMap;
         newBuilder.parentFunctionForConsumer = function;
+        newBuilder.parentSetterType = ParentSetterType.COLLECTION;
         return (NewBuilder) newBuilder;
     }
 
@@ -555,8 +566,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
                 return (ParentBuilder) parent;
 
             case COLLECTION:
-                if ( parentCollection == null )
-                    throw new IllegalArgumentException("The collection getter of the parent builder cannot be null.");
                 if ( parentFunctionForConsumer == null ) parentCollection.add(object);
                 else parentCollection.add(parentFunctionForConsumer.apply(object));
                 return (ParentBuilder) parent;
@@ -584,6 +593,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     @Override
     public Type build()
     {
+        if ( parentSetterType != null )
+            throw new UnsupportedOperationException(
+                    "This builder was called from another builder. " +
+                            "Call the build() method of the parent builder.");
         return object;
     }
 }

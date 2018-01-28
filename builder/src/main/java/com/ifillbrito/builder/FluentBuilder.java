@@ -85,10 +85,10 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             NewBuilder builder
     );
 
-    <Item, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder addWithBuilder(
+    <Item, BuilderType, ListOrSet extends Collection<Item>, NewBuilder extends FluentBuilder<BuilderType, NewBuilder>> NewBuilder addWithBuilder(
             Function<Type, ListOrSet> collectionGetter,
             NewBuilder builder,
-            Function<Type, Item> function
+            Function<BuilderType, Item> function
     );
 
     // maps
