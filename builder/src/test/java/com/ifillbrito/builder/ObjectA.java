@@ -13,7 +13,8 @@ public class ObjectA
     private ObjectB objectB;
     private ObjectA objectA;
     private List<String> list;
-    private List<ObjectA> objectList = new ArrayList<>();
+    private List<ObjectA> objectsA = new ArrayList<>();
+    private List<ObjectB> objectsB = new ArrayList<>();
 
     public String getText()
     {
@@ -65,13 +66,23 @@ public class ObjectA
         this.list = list;
     }
 
-    public List<ObjectA> getObjectList()
+    public List<ObjectA> getObjectsA()
     {
-        return objectList;
+        return objectsA;
     }
 
-    public void setObjectList(List<ObjectA> objectList)
+    public void setObjectsA(List<ObjectA> objectsA)
     {
-        this.objectList = objectList;
+        this.objectsA = objectsA;
+    }
+
+    public List<ObjectB> getObjectsB()
+    {
+        return objectsB;
+    }
+
+    public void setObjectsB(List<ObjectB> objectsB)
+    {
+        this.objectsB = objectsB;
     }
 }

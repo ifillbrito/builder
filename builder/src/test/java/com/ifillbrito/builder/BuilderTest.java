@@ -431,10 +431,10 @@ public class BuilderTest
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
-                .addWithAlias(ObjectA::getObjectList, "a")
+                .addWithAlias(ObjectA::getObjectsA, "a")
                 .build();
 
-        assertEquals("object a", objectA.getObjectList().get(0).getText());
+        assertEquals("object a", objectA.getObjectsA().get(0).getText());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -443,7 +443,7 @@ public class BuilderTest
         Builder.of(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
-                .addWithAlias(ObjectA::getObjectList, "b")
+                .addWithAlias(ObjectA::getObjectsA, "b")
                 .build();
     }
 
@@ -487,24 +487,24 @@ public class BuilderTest
     {
         //@formatter:off
         ObjectA objectA = Builder.of(new ObjectA())
-                .addWithBuilder(ObjectA::getObjectList, Builder.of(new ObjectA()))
+                .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
                     .set(ObjectA::setText, "child 1")
                     .toParent()
-                .addWithBuilder(ObjectA::getObjectList, Builder.of(new ObjectA()))
+                .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
                     .set(ObjectA::setText, "child 2")
                     .toParent()
                 .build();
         //@formatter:on
 
-        assertEquals("child 1", objectA.getObjectList().get(0).getText());
-        assertEquals("child 2", objectA.getObjectList().get(1).getText());
+        assertEquals("child 1", objectA.getObjectsA().get(0).getText());
+        assertEquals("child 2", objectA.getObjectsA().get(1).getText());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void addWithBuilder_getterAndBuilder_exception()
     {
         Builder.of(new ObjectA())
-                .addWithBuilder(ObjectA::getObjectList, Builder.of(new ObjectA()))
+                .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
                 .set(ObjectA::setText, "child 1")
                 .build(); // build() not allowed here. toParent() must be called.
     }
@@ -520,7 +520,7 @@ public class BuilderTest
     public void addWithBuilder_getterAndNullBuilder_exception()
     {
         Builder.of(new ObjectA())
-                .addWithBuilder(ObjectA::getObjectList, null);
+                .addWithBuilder(ObjectA::getObjectsA, null);
     }
 
     @Test
