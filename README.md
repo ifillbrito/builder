@@ -5,15 +5,15 @@ This project provides a generic fluent builder that can be used as it is for any
 - Internal References (aliases)
 - Functions can be applied to internal builders
 - Support for adding elements to collections and maps 
-    - unit tests for maps missing
+    - Warning! The unit tests for maps are missing.
 
-For more details about how these features work, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/blob/master/builder/src/test/java/com/ifillbrito/builder/BuilderTest.java'>unit tests</a>. The unit tests use a generic builder. Consider extending the class ``BaseBuilder`` to improve code readability.
+For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/blob/master/builder/src/test/java/com/ifillbrito/builder/BuilderTest.java'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
 
 ## Example:
 In the following example we show how to build a basic object using three approaches:
-1. Without using builder
+1. Without using a builder
 2. Using the generic builder
-3. Using a specific builder (extends the generic ``BaseBuilder``)
+3. Using specific builders (extends ``BaseBuilder``)
 
 The object to be built looks as follows:
 ````
@@ -103,7 +103,7 @@ ObjectA main = Builder.of(new ObjectA())
     .build();
 ````
 
-### Using the Specific Builder (extends ``BaseBuilder``)
+### Using Specific Builders (``extends BaseBuilder``)
 ````java
 ObjectA main = MyBuilderA.of(new ObjectA())
     .withText("main")
