@@ -4,8 +4,8 @@ This project provides a generic fluent builder that can be used as it is for any
 - Fluent
 - Internal References (aliases)
 - Functions can be applied to internal builders
-- Support for adding elements to collections and maps 
-    - Warning! The unit tests for maps are missing.
+- Support for adding elements to collections and maps
+  - Warning! The unit tests for maps are missing.
 
 For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/blob/master/builder/src/test/java/com/ifillbrito/builder/BuilderTest.java'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
 
