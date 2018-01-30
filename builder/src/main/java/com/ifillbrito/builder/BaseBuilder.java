@@ -247,8 +247,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        MapType map = mapGetter.apply(object);
-        map.put(key, value);
+        if ( mapGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        MapType targetMap = mapGetter.apply(object);
+        if ( targetMap == null ) throw new NullPointerException("The target map is null.");
+        targetMap.put(key, value);
         return (GenericBuilder) this;
     }
 
@@ -259,7 +261,13 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String valueAlias
     )
     {
-        return put(mapGetter, (Key) aliasMap.get(keyAlias), (Value) aliasMap.get(valueAlias));
+        Key key = (Key) aliasMap.get(keyAlias);
+        if ( key == null )
+            throw new IllegalArgumentException("The alias " + keyAlias + " has not been defined. The alias must be defined before it is used.");
+        Value value = (Value) aliasMap.get(valueAlias);
+        if ( value == null )
+            throw new IllegalArgumentException("The alias " + valueAlias + " has not been defined. The alias must be defined before it is used.");
+        return put(mapGetter, key, value);
     }
 
     @Override

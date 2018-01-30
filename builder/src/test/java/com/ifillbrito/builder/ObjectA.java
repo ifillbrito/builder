@@ -1,7 +1,9 @@
 package com.ifillbrito.builder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by gjib on 25.01.18.
@@ -15,6 +17,8 @@ public class ObjectA
     private List<String> list;
     private List<ObjectA> objectsA = new ArrayList<>();
     private List<ObjectB> objectsB = new ArrayList<>();
+    private Map<String, Integer> map;
+    private Map<ObjectA, ObjectB> objectsMap = new HashMap<>();
 
     public String getText()
     {
@@ -84,5 +88,25 @@ public class ObjectA
     public void setObjectsB(List<ObjectB> objectsB)
     {
         this.objectsB = objectsB;
+    }
+
+    public Map<String, Integer> getMap()
+    {
+        return map;
+    }
+
+    public void setMap(Map<String, Integer> map)
+    {
+        this.map = map;
+    }
+
+    public Map<ObjectA, ObjectB> getObjectsMap()
+    {
+        return objectsMap;
+    }
+
+    public void setObjectsMap(Map<ObjectA, ObjectB> objectsMap)
+    {
+        this.objectsMap = objectsMap;
     }
 }

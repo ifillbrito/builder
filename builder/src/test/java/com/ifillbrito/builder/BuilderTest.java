@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -183,6 +185,20 @@ public class BuilderTest
                         ObjectA::setObjectB,
                         ObjectA.class,
                         "a",
+                        null)
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setWithAlias_setterAndAliasTypeAndNonDefinedAliasAndFunction_exception()
+    {
+        Builder.of(new ObjectA())
+                .as("a")
+                .set(ObjectA::setText, "text")
+                .setWithAlias( // create ObjectB using data from ObjectA
+                        ObjectA::setObjectB,
+                        ObjectA.class,
+                        "b",
                         null)
                 .build();
     }
@@ -590,13 +606,98 @@ public class BuilderTest
     }
 
     @Test
-    public void put()
+    public void put_getterAndKeyAndValue()
     {
+        ObjectA objectA = Builder.of(new ObjectA())
+                .set(ObjectA::setMap, new HashMap<>())
+                .put(ObjectA::getMap, "key", 1)
+                .build();
+
+        assertEquals((Integer) 1, objectA.getMap().get("key"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void put_nullGetterAndKeyAndValue_exception()
+    {
+        Builder.of(new ObjectA())
+                .set(ObjectA::setMap, new HashMap<>())
+                .put(null, "key", 1)
+                .build();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void put_GetterAndKeyAndValueToNullMap_exception()
+    {
+        // The map in ObjectA is not initialized.
+        Builder.of(new ObjectA())
+                .put(ObjectA::getMap, "key", 1)
+                .build();
     }
 
     @Test
-    public void putWithAliases()
+    public void putWithAlias_getterAndKeyAndValueAndKeyAliasAndValueAlias()
     {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("key")
+                    .toParent(ObjectA.class)
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "the value")
+                    .toParent(ObjectA.class)
+                .putWithAlias(ObjectA::getObjectsMap, "key", "value")
+                .build();
+        //@formatter:on
+
+        ObjectA key = objectA.getObjectA();
+        Map<ObjectA, ObjectB> map = objectA.getObjectsMap();
+        ObjectB value = map.get(key);
+        assertEquals("the value", value.getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAlias_getterAndKeyAndValueAndNonDefinedKeyAliasAndValueAlias_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "the value")
+                    .toParent(ObjectA.class)
+                .putWithAlias(ObjectA::getObjectsMap, "key", "value")
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAlias_getterAndKeyAndValueAndKeyAliasAndNonDefinedValueAlias_exception()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("key")
+                    .toParent(ObjectA.class)
+                .putWithAlias(ObjectA::getObjectsMap, "key", "value")
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAlias_nullGetterAndKeyAndValueAndKeyAliasAndValueAlias()
+    {
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("key")
+                    .toParent(ObjectA.class)
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "the value")
+                    .toParent(ObjectA.class)
+                .putWithAlias(null, "key", "value")
+                .build();
+        //@formatter:on
     }
 
     @Test
