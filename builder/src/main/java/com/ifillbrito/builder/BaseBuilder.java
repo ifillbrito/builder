@@ -58,8 +58,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String alias
     )
     {
-        Value value = (Value) aliasMap.get(alias);
-        verifyAlias(alias, value);
+        Value value = (Value) getByAlias(alias);
         return set(consumer, value);
     }
 
@@ -71,8 +70,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Value> function
     )
     {
-        Alias argument = (Alias) aliasMap.get(alias);
-        verifyAlias(alias, argument);
+        Alias argument = (Alias) getByAlias(alias);
         if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         return set(consumer, function.apply(argument));
     }
@@ -139,8 +137,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String alias
     )
     {
-        Item item = (Item) aliasMap.get(alias);
-        verifyAlias(alias, item);
+        Item item = (Item) getByAlias(alias);
         return add(collectionGetter, item);
     }
 
@@ -153,8 +150,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
-        Alias targetObject = (Alias) aliasMap.get(alias);
-        verifyAlias(alias, targetObject);
+        Alias targetObject = (Alias) getByAlias(alias);
         return add(collectionGetter, function.apply(targetObject));
     }
 
@@ -217,10 +213,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String valueAlias
     )
     {
-        Key key = (Key) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
-        Value value = (Value) aliasMap.get(valueAlias);
-        verifyAlias(valueAlias, value);
+        Key key = (Key) getByAlias(keyAlias);
+        Value value = (Value) getByAlias(valueAlias);
         return put(mapGetter, key, value);
     }
 
@@ -231,8 +225,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        Key key = (Key) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
+        Key key = (Key) getByAlias(keyAlias);
         return put(mapGetter, key, value);
     }
 
@@ -243,8 +236,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String valueAlias
     )
     {
-        Value value = (Value) aliasMap.get(valueAlias);
-        verifyAlias(valueAlias, value);
+        Value value = (Value) getByAlias(valueAlias);
         return put(mapGetter, key, value);
     }
 
@@ -257,10 +249,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String valueAlias
     )
     {
-        Alias key = (Alias) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
-        Value value = (Value) aliasMap.get(valueAlias);
-        verifyAlias(valueAlias, value);
+        Alias key = (Alias) getByAlias(keyAlias);
+        Value value = (Value) getByAlias(valueAlias);
         return put(mapGetter, aliasKeyFunction.apply(key), value);
     }
 
@@ -273,8 +263,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        Alias key = (Alias) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
+        Alias key = (Alias) getByAlias(keyAlias);
         return put(mapGetter, aliasKeyFunction.apply(key), value);
     }
 
@@ -287,9 +276,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Value> aliasValueFunction
     )
     {
-        Key key = (Key) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
-        Alias value = (Alias) aliasMap.get(valueAlias);
+        Key key = (Key) getByAlias(keyAlias);
+        Alias value = (Alias) getByAlias(valueAlias);
         return put(mapGetter, key, aliasValueFunction.apply(value));
     }
 
@@ -302,8 +290,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Value> valueFunction
     )
     {
-        Alias value = (Alias) aliasMap.get(valueAlias);
-        verifyAlias(valueAlias, value);
+        Alias value = (Alias) getByAlias(valueAlias);
         return put(mapGetter, key, valueFunction.apply(value));
     }
 
@@ -318,10 +305,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<ValueAlias, Value> valueAliasValueFunction
     )
     {
-        KeyAlias key = (KeyAlias) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
-        ValueAlias value = (ValueAlias) aliasMap.get(valueAlias);
-        verifyAlias(valueAlias, value);
+        KeyAlias key = (KeyAlias) getByAlias(keyAlias);
+        ValueAlias value = (ValueAlias) getByAlias(valueAlias);
         return put(mapGetter, keyAliasKeyFunction.apply(key), valueAliasValueFunction.apply(value));
     }
 
@@ -359,8 +344,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             NewBuilder builder
     )
     {
-        Key key = (Key) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
+        Key key = (Key) getByAlias(keyAlias);
         return putWithBuilder(mapGetter, key, builder);
     }
 
@@ -373,8 +357,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             NewBuilder builder
     )
     {
-        Alias key = (Alias) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
+        Alias key = (Alias) getByAlias(keyAlias);
         return putWithBuilder(mapGetter, aliasKeyFunction.apply(key), builder);
     }
 
@@ -401,8 +384,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
-        Key key = (Key) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
+        Key key = (Key) getByAlias(keyAlias);
         return (NewBuilder) putWithBuilder(mapGetter, key, newBuilder);
     }
 
@@ -418,8 +400,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
-        Alias key = (Alias) aliasMap.get(keyAlias);
-        verifyAlias(keyAlias, key);
+        Alias key = (Alias) getByAlias(keyAlias);
         return (NewBuilder) putWithBuilder(mapGetter, aliasKeyFunction.apply(key), newBuilder);
     }
 
@@ -484,6 +465,13 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     // private methods
+
+    protected Object getByAlias(String keyAlias)
+    {
+        Object key = aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return key;
+    }
 
     protected <T> void verifyAlias(String aliasName, T alias)
     {
