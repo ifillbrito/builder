@@ -1,10 +1,5 @@
 package com.ifillbrito.builder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by gjib on 25.01.18.
  */
