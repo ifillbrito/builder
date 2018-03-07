@@ -428,6 +428,38 @@ public class BuilderTest_Maps
         assertEquals("objectB", objectB.getText());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForValue2_nullGetter_exception()
+    {
+        ObjectA key = new ObjectA();
+
+        //@formatter:off
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAliasForValue(null, key, ObjectB.class, "value" , me -> me)
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForValue2_invalidValueAlias_exception()
+    {
+        ObjectA key = new ObjectA();
+
+        //@formatter:off
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAliasForValue(ObjectA::getObjectsMap, key, ObjectB.class, "invalidAlias" , me -> me)
+                .build();
+        //@formatter:on
+    }
+
     @Test
     public void put3()
     {

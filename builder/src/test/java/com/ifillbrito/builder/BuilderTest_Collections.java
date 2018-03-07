@@ -15,7 +15,7 @@ public class BuilderTest_Collections
     @Test
     public void add()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
                 .add(ObjectA::getList, "A")
                 .add(ObjectA::getList, "B")
@@ -29,7 +29,7 @@ public class BuilderTest_Collections
     @Test(expected = NullPointerException.class)
     public void add_toNullList_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .add(ObjectA::getList, "A")
                 .build();
     }
@@ -37,7 +37,7 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void add_nullGetter_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .add(null, "A")
                 .build();
     }
@@ -45,7 +45,7 @@ public class BuilderTest_Collections
     @Test
     public void addAll_getterAndList()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
                 .addAll(ObjectA::getList, Arrays.asList("A", "B", "C"))
                 .build();
@@ -56,7 +56,7 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void addAll_nullGetter_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
                 .addAll(null, Arrays.asList("A", "B", "C"))
                 .build();
@@ -65,7 +65,7 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void addAll_nullList_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
                 .addAll(ObjectA::getList, null)
                 .build();
@@ -74,7 +74,7 @@ public class BuilderTest_Collections
     @Test(expected = NullPointerException.class)
     public void addAll_listToNullList_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .addAll(ObjectA::getList, Arrays.asList("A", "B", "C"))
                 .build();
     }
@@ -82,7 +82,7 @@ public class BuilderTest_Collections
     @Test
     public void addWithAlias()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
                 .addWithAlias(ObjectA::getObjectsA, "a")
@@ -94,7 +94,7 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void addWithAlias_invalidAlias_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
                 .addWithAlias(ObjectA::getObjectsA, "b")
@@ -104,7 +104,7 @@ public class BuilderTest_Collections
     @Test
     public void addWithAlias_function()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
                 .set(ObjectA::setList, new ArrayList<>())
@@ -117,7 +117,7 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void addWithAlias_invalidAliasAndFunction_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
                 .set(ObjectA::setList, new ArrayList<>())
@@ -128,7 +128,7 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void addWithAlias_aliasAndNullFunction_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "object a")
                 .set(ObjectA::setList, new ArrayList<>())
@@ -140,11 +140,11 @@ public class BuilderTest_Collections
     public void addWithBuilder()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .addWithBuilder(ObjectA::getObjectsA, new Builder<>(new ObjectA()))
                     .set(ObjectA::setText, "child 1")
                     .toParent()
-                .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
+                .addWithBuilder(ObjectA::getObjectsA, new Builder<>(new ObjectA()))
                     .set(ObjectA::setText, "child 2")
                     .toParent()
                 .build();
@@ -157,8 +157,8 @@ public class BuilderTest_Collections
     @Test(expected = UnsupportedOperationException.class)
     public void addWithBuilder_exception()
     {
-        Builder.of(new ObjectA())
-                .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
+        new Builder<>(new ObjectA())
+                .addWithBuilder(ObjectA::getObjectsA, new Builder<>(new ObjectA()))
                 .set(ObjectA::setText, "child 1")
                 .build(); // build() not allowed here. toParent() must be called.
     }
@@ -166,14 +166,14 @@ public class BuilderTest_Collections
     @Test(expected = IllegalArgumentException.class)
     public void addWithBuilder_nullGetter1_exception()
     {
-        Builder.of(new ObjectA())
-                .addWithBuilder(null, Builder.of(new ObjectA()));
+        new Builder<>(new ObjectA())
+                .addWithBuilder(null, new Builder<>(new ObjectA()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void addWithBuilder_nullBuilder_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .addWithBuilder(ObjectA::getObjectsA, null);
     }
 
@@ -181,9 +181,9 @@ public class BuilderTest_Collections
     public void addWithBuilder_builderAndFunction()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
-                .addWithBuilder(ObjectA::getList, Builder.of(new ObjectA()), ObjectA::getText)
+                .addWithBuilder(ObjectA::getList, new Builder<>(new ObjectA()), ObjectA::getText)
                     .set(ObjectA::setText, "child 1")
                     .toParent()
                 .build();
@@ -196,9 +196,9 @@ public class BuilderTest_Collections
     public void addWithBuilder_nullFunction_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
-                .addWithBuilder(ObjectA::getList, Builder.of(new ObjectA()), null)
+                .addWithBuilder(ObjectA::getList, new Builder<>(new ObjectA()), null)
                     .set(ObjectA::setText, "child 1")
                     .toParent()
                 .build();
@@ -209,7 +209,7 @@ public class BuilderTest_Collections
     public void addWithBuilder_nullBuilderAndFunction_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
                 .addWithBuilder(ObjectA::getList, null, ObjectA::getText)
                     .set(ObjectA::setText, "child 1")
@@ -222,9 +222,9 @@ public class BuilderTest_Collections
     public void addWithBuilder_nullGetter2_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
-                .addWithBuilder(null, Builder.of(new ObjectA()), ObjectA::getText)
+                .addWithBuilder(null, new Builder<>(new ObjectA()), ObjectA::getText)
                     .set(ObjectA::setText, "child 1")
                     .toParent()
                 .build();
@@ -235,8 +235,8 @@ public class BuilderTest_Collections
     public void addWithBuilder_intoNullList_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
-                .addWithBuilder(ObjectA::getList, Builder.of(new ObjectA()), ObjectA::getText)
+        new Builder<>(new ObjectA())
+                .addWithBuilder(ObjectA::getList, new Builder<>(new ObjectA()), ObjectA::getText)
                     .set(ObjectA::setText, "child 1")
                     .toParent()
                 .build();

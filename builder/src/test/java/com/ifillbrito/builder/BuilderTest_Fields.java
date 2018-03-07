@@ -13,7 +13,7 @@ public class BuilderTest_Fields
     @Test
     public void set()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .set(ObjectA::setText, "text")
                 .set(ObjectA::setNumber, 10)
                 .build();
@@ -25,7 +25,7 @@ public class BuilderTest_Fields
     @Test(expected = IllegalArgumentException.class)
     public void set_nullSetter_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(null, "text")
                 .build();
     }
@@ -33,7 +33,7 @@ public class BuilderTest_Fields
     @Test
     public void set_nullValue()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .set(ObjectA::setText, null)
                 .set(ObjectA::setNumber, 10)
                 .build();
@@ -45,7 +45,7 @@ public class BuilderTest_Fields
     @Test
     public void setWithAlias()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
                 .setWithAlias(ObjectA::setObjectA, "alias")
@@ -60,7 +60,7 @@ public class BuilderTest_Fields
     @Test(expected = IllegalArgumentException.class)
     public void setWithAlias_nullSetter()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
                 .setWithAlias(null, "alias")
@@ -70,7 +70,7 @@ public class BuilderTest_Fields
     @Test
     public void setWithAlias_nullAlias_positive()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .as(null)
                 .set(ObjectA::setText, "text")
                 .setWithAlias(ObjectA::setObjectA, null)
@@ -85,7 +85,7 @@ public class BuilderTest_Fields
     @Test(expected = IllegalArgumentException.class)
     public void setWithAlias_invalidAlias_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
                 .setWithAlias(ObjectA::setObjectA, "another alias")
@@ -95,7 +95,7 @@ public class BuilderTest_Fields
     @Test(expected = ClassCastException.class)
     public void setWithAlias_classCastException()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("alias")
                 .set(ObjectA::setText, "text")
                 .setWithAlias(ObjectA::setObjectB, "alias")
@@ -105,7 +105,7 @@ public class BuilderTest_Fields
     @Test
     public void setWithAlias_aliasAndFunction()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
                 .setWithAlias( // create ObjectB using data from ObjectA
@@ -126,7 +126,7 @@ public class BuilderTest_Fields
     @Test(expected = IllegalArgumentException.class)
     public void setWithAlias_nullSetter_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
                 .setWithAlias( // create ObjectB using data from ObjectA
@@ -144,7 +144,7 @@ public class BuilderTest_Fields
     @Test(expected = IllegalArgumentException.class)
     public void setWithAlias_nullAliasFunction_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
                 .setWithAlias( // create ObjectB using data from ObjectA
@@ -158,7 +158,7 @@ public class BuilderTest_Fields
     @Test(expected = IllegalArgumentException.class)
     public void setWithAlias_nullFunction_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
                 .setWithAlias( // create ObjectB using data from ObjectA
@@ -172,7 +172,7 @@ public class BuilderTest_Fields
     @Test(expected = ClassCastException.class)
     public void setWithAlias_aliasAndFunction_classCastException()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .as("a")
                 .set(ObjectA::setText, "text")
                 .setWithAlias( // create ObjectB using data from ObjectA
@@ -191,11 +191,11 @@ public class BuilderTest_Fields
     public void setWithBuilder()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .set(ObjectB::setText, "object B")
                     .toParent(ObjectA.class) // use this to tell the compiler the parent type
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .set(ObjectA::setText, "object A")
                     .toParent() // use this if the parent type is the same as the child type
                 .build();
@@ -209,8 +209,8 @@ public class BuilderTest_Fields
     public void setWithBuilder_nullSetter_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(null, Builder.of(new ObjectB()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(null, new Builder<>(new ObjectB()))
                     .set(ObjectB::setText, "object B")
                     .toParent(ObjectA.class)
                 .build();
@@ -221,8 +221,8 @@ public class BuilderTest_Fields
     public void setWithBuilder_function()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setText, Builder.of(new ObjectB()), ObjectB::getText)
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setText, new Builder<>(new ObjectB()), ObjectB::getText)
                     .set(ObjectB::setText, "object B")
                     .toParent(ObjectA.class)
                 .build();
@@ -235,8 +235,8 @@ public class BuilderTest_Fields
     public void setWithBuilder_nullFunction_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setText, Builder.of(new ObjectB()), null)
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setText, new Builder<>(new ObjectB()), null)
                     .set(ObjectB::setText, "object B")
                     .toParent(ObjectA.class)
                 .build();
@@ -247,6 +247,6 @@ public class BuilderTest_Fields
     public void setWithBuilder_noParent_exception()
     {
         // This builder has no parent.
-        Builder.of(new ObjectA()).toParent();
+        new Builder<>(new ObjectA()).toParent();
     }
 }
