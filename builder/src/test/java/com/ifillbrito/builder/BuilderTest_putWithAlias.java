@@ -10,37 +10,8 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by gjib on 25.01.18.
  */
-public class BuilderTest_Maps
+public class BuilderTest_putWithAlias
 {
-    @Test
-    public void put()
-    {
-        ObjectA objectA = new Builder<>(new ObjectA())
-                .set(ObjectA::setMap, new HashMap<>())
-                .put(ObjectA::getMap, "key", 1)
-                .build();
-
-        assertEquals((Integer) 1, objectA.getMap().get("key"));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void put_nullGetter_exception()
-    {
-        new Builder<>(new ObjectA())
-                .set(ObjectA::setMap, new HashMap<>())
-                .put(null, "key", 1)
-                .build();
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void put_toNullMap_exception()
-    {
-        // The map in ObjectA is not initialized.
-        new Builder<>(new ObjectA())
-                .put(ObjectA::getMap, "key", 1)
-                .build();
-    }
-
     @Test
     public void putWithAlias()
     {
@@ -570,50 +541,5 @@ public class BuilderTest_Maps
                 .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me->me, ObjectB.class, "value" , null)
                 .build();
         //@formatter:on
-    }
-
-    @Test
-    public void putAll()
-    {
-    }
-
-    @Test
-    public void putWithBuilder()
-    {
-    }
-
-    @Test
-    public void putWithAliasForKeyAndBuilderForValue()
-    {
-    }
-
-    @Test
-    public void putWithBuilder1()
-    {
-    }
-
-    @Test
-    public void putWithAliasForKeyAndBuilderForValue1()
-    {
-    }
-
-    @Test
-    public void putWithBuilder2()
-    {
-    }
-
-    @Test
-    public void putWithAliasForKeyAndBuilderForValue2()
-    {
-    }
-
-    @Test
-    public void put4()
-    {
-    }
-
-    @Test
-    public void putWithAliasForKeyAndBuilderForValue3()
-    {
     }
 }
