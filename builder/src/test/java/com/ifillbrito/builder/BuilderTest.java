@@ -17,7 +17,7 @@ public class BuilderTest
 {
 
     @Test
-    public void set_setterAndValue()
+    public void set()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .set(ObjectA::setText, "text")
@@ -29,7 +29,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void set_nullSetterAndValue_exception()
+    public void set_nullSetter_exception()
     {
         Builder.of(new ObjectA())
                 .set(null, "text")
@@ -37,7 +37,7 @@ public class BuilderTest
     }
 
     @Test
-    public void set_setterAndNullValue()
+    public void set_nullValue()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .set(ObjectA::setText, null)
@@ -49,35 +49,7 @@ public class BuilderTest
     }
 
     @Test
-    public void set_setterAndArgumentAndFunction()
-    {
-        ObjectA objectA = Builder.of(new ObjectA())
-                .set(ObjectA::setText, 10, String::valueOf)
-                .set(ObjectA::setNumber, "10", Integer::parseInt)
-                .build();
-
-        assertEquals("10", objectA.getText());
-        assertEquals(10, objectA.getNumber());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void set_nullSetterAndArgumentAndFunction_exception()
-    {
-        Builder.of(new ObjectA())
-                .set(null, 10, String::valueOf)
-                .build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void set_setterAndArgumentAndNullFunction_exception()
-    {
-        Builder.of(new ObjectA())
-                .set(ObjectA::setText, 10, null)
-                .build();
-    }
-
-    @Test
-    public void setWithAlias_setterAndAlias()
+    public void setWithAlias()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("alias")
@@ -92,7 +64,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_nullSetterAndAlias()
+    public void setWithAlias_nullSetter()
     {
         Builder.of(new ObjectA())
                 .as("alias")
@@ -102,7 +74,7 @@ public class BuilderTest
     }
 
     @Test
-    public void setWithAlias_setterAndNullAlias_positive()
+    public void setWithAlias_nullAlias_positive()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as(null)
@@ -117,7 +89,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_setterAndNonDefinedAlias_exception()
+    public void setWithAlias_nonDefinedAlias_exception()
     {
         Builder.of(new ObjectA())
                 .as("alias")
@@ -127,7 +99,7 @@ public class BuilderTest
     }
 
     @Test(expected = ClassCastException.class)
-    public void setWithAlias_setterAndAlias_classCastException()
+    public void setWithAlias_classCastException()
     {
         Builder.of(new ObjectA())
                 .as("alias")
@@ -137,7 +109,7 @@ public class BuilderTest
     }
 
     @Test
-    public void setWithAlias_setterAndAliasTypeAndAliasAndFunction()
+    public void setWithAlias_aliasAndFunction()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("a")
@@ -158,7 +130,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_nullSetterAndAliasTypeAndAliasAndFunction_exception()
+    public void setWithAlias_nullSetter_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -176,7 +148,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_setterAndAliasTypeAndAliasAndNullFunction_exception()
+    public void setWithAlias_nullAliasFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -190,7 +162,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_setterAndAliasTypeAndNonDefinedAliasAndFunction_exception()
+    public void setWithAlias_nullFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -204,7 +176,7 @@ public class BuilderTest
     }
 
     @Test(expected = ClassCastException.class)
-    public void setWithAlias_setterAndAliasTypeAndAliasAndFunction_classCastException()
+    public void setWithAlias_aliasAndFunction_classCastException()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -222,7 +194,7 @@ public class BuilderTest
     }
 
     @Test
-    public void setWithBuilder_setterAndBuilder()
+    public void setWithBuilder()
     {
         //@formatter:off
         ObjectA objectA = Builder.of(new ObjectA())
@@ -240,7 +212,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithBuilder_nullSetterAndBuilder_exception()
+    public void setWithBuilder_nullSetter_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -252,7 +224,7 @@ public class BuilderTest
     }
 
     @Test
-    public void setWithBuilder_setterAndBuilderAndFunction()
+    public void setWithBuilder_function()
     {
         //@formatter:off
         ObjectA objectA = Builder.of(new ObjectA())
@@ -266,7 +238,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithBuilder_setterAndBuilderAndNullFunction_exception()
+    public void setWithBuilder_nullFunction_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -285,7 +257,7 @@ public class BuilderTest
     }
 
     @Test
-    public void add_getterAndValue()
+    public void add()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
@@ -307,47 +279,10 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void add_nullGetterAndValue_exception()
+    public void add_nullGetter_exception()
     {
         Builder.of(new ObjectA())
                 .add(null, "A")
-                .build();
-    }
-
-    @Test
-    public void add_getterAndValueAndFunction()
-    {
-        ObjectA objectA = Builder.of(new ObjectA())
-                .set(ObjectA::setList, new ArrayList<>())
-                .add(ObjectA::getList, "A", String::toLowerCase)
-                .build();
-
-        assertEquals("a", objectA.getList().get(0));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void add_getterAndValueAndFunctionToNullList_exception()
-    {
-        Builder.of(new ObjectA())
-                .add(ObjectA::getList, "A", String::toLowerCase)
-                .build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void add_nullGetterValueAndFunction_exception()
-    {
-        Builder.of(new ObjectA())
-                .set(ObjectA::setList, new ArrayList<>())
-                .add(null, "A", String::toLowerCase)
-                .build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void add_getterValueAndNullFunction_exception()
-    {
-        Builder.of(new ObjectA())
-                .set(ObjectA::setList, new ArrayList<>())
-                .add(ObjectA::getList, "A", null)
                 .build();
     }
 
@@ -363,7 +298,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addAll_nullGetterAndList_exception()
+    public void addAll_nullGetter_exception()
     {
         Builder.of(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
@@ -372,7 +307,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addAll_getterAndNullList_exception()
+    public void addAll_nullList_exception()
     {
         Builder.of(new ObjectA())
                 .set(ObjectA::setList, new ArrayList<>())
@@ -381,7 +316,7 @@ public class BuilderTest
     }
 
     @Test(expected = NullPointerException.class)
-    public void addAll_getterAndListToNullList_exception()
+    public void addAll_listToNullList_exception()
     {
         Builder.of(new ObjectA())
                 .addAll(ObjectA::getList, Arrays.asList("A", "B", "C"))
@@ -389,60 +324,7 @@ public class BuilderTest
     }
 
     @Test
-    public void addAll_getterAndValueAndFunction()
-    {
-        ObjectA objectA = Builder.of(new ObjectA())
-                .set(ObjectA::setList, new ArrayList<>())
-                .addAll(ObjectA::getList,
-                        Arrays.asList(1, 2, 3),
-                        list -> list
-                                .stream()
-                                .map(String::valueOf)
-                                .collect(Collectors.toList()))
-                .build();
-
-        assertEquals(3, objectA.getList().size());
-        assertEquals("1", objectA.getList().get(0));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void addAll_nullGetterAndValueAndFunction_exception()
-    {
-        Builder.of(new ObjectA())
-                .set(ObjectA::setList, new ArrayList<>())
-                .addAll(null,
-                        Arrays.asList(1, 2, 3),
-                        list -> list
-                                .stream()
-                                .map(String::valueOf)
-                                .collect(Collectors.toList()))
-                .build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void addAll_getterAndValueAndNullFunction_exception()
-    {
-        Builder.of(new ObjectA())
-                .set(ObjectA::setList, new ArrayList<>())
-                .addAll(ObjectA::getList, Arrays.asList(1, 2, 3), null)
-                .build();
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void addAll_getterAndValueAndFunctionToNullList_exception()
-    {
-        Builder.of(new ObjectA())
-                .addAll(ObjectA::getList,
-                        Arrays.asList(1, 2, 3),
-                        list -> list
-                                .stream()
-                                .map(String::valueOf)
-                                .collect(Collectors.toList()))
-                .build();
-    }
-
-    @Test
-    public void addWithAlias_getterAndAlias()
+    public void addWithAlias()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("a")
@@ -454,7 +336,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_getterAndNonDefinedAlias_exception()
+    public void addWithAlias_nonDefinedAlias_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -464,7 +346,7 @@ public class BuilderTest
     }
 
     @Test
-    public void addWithAlias_getterAndAliasAndFunction()
+    public void addWithAlias_function()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .as("a")
@@ -477,7 +359,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_getterAndNonDefinedAliasAndFunction_exception()
+    public void addWithAlias_nonDefinedAliasAndFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -488,7 +370,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_getterAndAliasAndNullFunction_exception()
+    public void addWithAlias_aliasAndNullFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -499,7 +381,7 @@ public class BuilderTest
     }
 
     @Test
-    public void addWithBuilder_getterAndBuilder()
+    public void addWithBuilder()
     {
         //@formatter:off
         ObjectA objectA = Builder.of(new ObjectA())
@@ -517,7 +399,7 @@ public class BuilderTest
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void addWithBuilder_getterAndBuilder_exception()
+    public void addWithBuilder_exception()
     {
         Builder.of(new ObjectA())
                 .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
@@ -526,21 +408,21 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithBuilder_nullGetterAndBuilder_exception()
+    public void addWithBuilder_nullGetter1_exception()
     {
         Builder.of(new ObjectA())
                 .addWithBuilder(null, Builder.of(new ObjectA()));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithBuilder_getterAndNullBuilder_exception()
+    public void addWithBuilder_nullBuilder_exception()
     {
         Builder.of(new ObjectA())
                 .addWithBuilder(ObjectA::getObjectsA, null);
     }
 
     @Test
-    public void addWithBuilder_getterAndBuilderAndFunction()
+    public void addWithBuilder_builderAndFunction()
     {
         //@formatter:off
         ObjectA objectA = Builder.of(new ObjectA())
@@ -555,7 +437,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithBuilder_getterAndBuilderAndNullFunction_exception()
+    public void addWithBuilder_nullFunction_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -568,7 +450,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithBuilder_getterAndNullBuilderAndFunction_exception()
+    public void addWithBuilder_nullBuilderAndFunction_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -581,7 +463,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithBuilder_nullGetterAndBuilderAndFunction_exception()
+    public void addWithBuilder_nullGetter2_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -594,7 +476,7 @@ public class BuilderTest
     }
 
     @Test(expected = NullPointerException.class)
-    public void addWithBuilder_getterAndBuilderAndFunctionIntoNullList_exception()
+    public void addWithBuilder_intoNullList_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -606,7 +488,7 @@ public class BuilderTest
     }
 
     @Test
-    public void put_getterAndKeyAndValue()
+    public void put()
     {
         ObjectA objectA = Builder.of(new ObjectA())
                 .set(ObjectA::setMap, new HashMap<>())
@@ -617,7 +499,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void put_nullGetterAndKeyAndValue_exception()
+    public void put_nullGetter_exception()
     {
         Builder.of(new ObjectA())
                 .set(ObjectA::setMap, new HashMap<>())
@@ -626,7 +508,7 @@ public class BuilderTest
     }
 
     @Test(expected = NullPointerException.class)
-    public void put_GetterAndKeyAndValueToNullMap_exception()
+    public void put_toNullMap_exception()
     {
         // The map in ObjectA is not initialized.
         Builder.of(new ObjectA())
@@ -635,7 +517,7 @@ public class BuilderTest
     }
 
     @Test
-    public void putWithAlias_getterAndKeyAndValueAndKeyAliasAndValueAlias()
+    public void putWithAlias()
     {
         //@formatter:off
         ObjectA objectA = Builder.of(new ObjectA())
@@ -657,7 +539,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAlias_getterAndKeyAndValueAndNonDefinedKeyAliasAndValueAlias_exception()
+    public void putWithAlias_nonDefinedKeyAlias_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -671,7 +553,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAlias_getterAndKeyAndValueAndKeyAliasAndNonDefinedValueAlias_exception()
+    public void putWithAlias_nonDefinedValueAlias_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -684,7 +566,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAlias_nullGetterAndKeyAndValueAndKeyAliasAndValueAlias()
+    public void putWithAlias_nullGetter()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -703,6 +585,51 @@ public class BuilderTest
     @Test
     public void putWithAliasForKey()
     {
+        ObjectB objectB = new ObjectB();
+        objectB.setText("object b");
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("key")
+                    .toParent(ObjectA.class)
+                .putWithAliasForKey(ObjectA::getObjectsMap, "key", objectB)
+                .build();
+        //@formatter:on
+
+        ObjectA key = objectA.getObjectA();
+        Map<ObjectA, ObjectB> map = objectA.getObjectsMap();
+        ObjectB value = map.get(key);
+        assertEquals("object b", value.getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForKey_nullMapGetter()
+    {
+        ObjectB objectB = new ObjectB();
+        objectB.setText("object b");
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("key")
+                    .toParent(ObjectA.class)
+                .putWithAliasForKey(null, "key", objectB)
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForKey_invalidKeyAlias()
+    {
+        ObjectB objectB = new ObjectB();
+        objectB.setText("object b");
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("key")
+                    .toParent(ObjectA.class)
+                .putWithAliasForKey(null, "KEY", objectB)
+                .build();
+        //@formatter:on
     }
 
     @Test

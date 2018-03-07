@@ -53,17 +53,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <Argument, Value> GenericBuilder set(
-            BiConsumer<Type, Value> consumer,
-            Argument argument,
-            Function<Argument, Value> function
-    )
-    {
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
-        return set(consumer, function.apply(argument));
-    }
-
-    @Override
     public <Value> GenericBuilder setWithAlias(
             BiConsumer<Type, Value> consumer,
             String alias
@@ -86,7 +75,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         Alias argument = (Alias) aliasMap.get(alias);
         if ( argument == null )
             throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
-        return set(consumer, argument, function);
+        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
+        return set(consumer, function.apply(argument));
     }
 
     @Override
@@ -132,21 +122,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <Argument, Item, ListOrSet extends Collection<Item>> GenericBuilder add(
-            Function<Type, ListOrSet> collectionGetter,
-            Argument argument,
-            Function<Argument, Item> function
-    )
-    {
-        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
-        ListOrSet targetCollection = collectionGetter.apply(object);
-        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
-        targetCollection.add(function.apply(argument));
-        return (GenericBuilder) this;
-    }
-
-    @Override
     public <Item, ListOrSet extends Collection<Item>> GenericBuilder addAll(
             Function<Type, ListOrSet> collectionGetter,
             ListOrSet collection
@@ -157,21 +132,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         ListOrSet targetCollection = collectionGetter.apply(object);
         if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
         targetCollection.addAll(collection);
-        return (GenericBuilder) this;
-    }
-
-    @Override
-    public <Argument, Item, ListOrSet extends Collection<Item>> GenericBuilder addAll(
-            Function<Type, ListOrSet> collectionGetter,
-            Argument argument,
-            Function<Argument, ListOrSet> function
-    )
-    {
-        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
-        ListOrSet targetCollection = collectionGetter.apply(object);
-        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
-        targetCollection.addAll(function.apply(argument));
         return (GenericBuilder) this;
     }
 
@@ -291,17 +251,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder put(
-            Function<Type, MapType> mapGetter,
-            Argument keyArgument,
-            Function<Argument, Key> keyFunction,
-            Value value
-    )
-    {
-        return put(mapGetter, keyFunction.apply(keyArgument), value);
-    }
-
-    @Override
     public <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
@@ -326,27 +275,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForValue(
-            Function<Type, MapType> mapGetter,
-            Argument keyArgument,
-            Function<Argument, Key> keyFunction,
-            String valueAlias
-    )
-    {
-        return put(mapGetter, keyFunction.apply(keyArgument), (Value) aliasMap.get(valueAlias));
-    }
-
-    @Override
-    public <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder put(
-            Function<Type, MapType> mapGetter,
-            Key key, Argument valueArgument,
-            Function<Argument, Value> argumentValueFunction
-    )
-    {
-        return put(mapGetter, key, argumentValueFunction.apply(valueArgument));
-    }
-
-    @Override
     public <Alias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             String keyAlias,
@@ -356,17 +284,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         return put(mapGetter, (Key) aliasMap.get(keyAlias), aliasValueFunction.apply((Alias) aliasMap.get(valueAlias)));
-    }
-
-    @Override
-    public <Argument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForKey(
-            Function<Type, MapType> mapGetter,
-            String keyAlias,
-            Argument valueArgument,
-            Function<Argument, Value> valueFunction
-    )
-    {
-        return put(mapGetter, (Key) aliasMap.get(keyAlias), valueFunction.apply(valueArgument));
     }
 
     @Override
@@ -382,18 +299,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <KeyArgument, ValueArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder put(
-            Function<Type, MapType> mapGetter,
-            KeyArgument keyArgument,
-            Function<KeyArgument, Key> keyArgumentKeyFunction,
-            ValueArgument valueArgument,
-            Function<ValueArgument, Value> valueArgumentValueFunction
-    )
-    {
-        return put(mapGetter, keyArgumentKeyFunction.apply(keyArgument), valueArgumentValueFunction.apply(valueArgument));
-    }
-
-    @Override
     public <KeyAlias, ValueAlias, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAlias(
             Function<Type, MapType> mapGetter,
             Class<KeyAlias> keyAliasType,
@@ -405,32 +310,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         return put(mapGetter, keyAliasKeyFunction.apply((KeyAlias) aliasMap.get(keyAlias)), valueAliasValueFunction.apply((ValueAlias) aliasMap.get(valueAlias)));
-    }
-
-    @Override
-    public <Alias, ValueArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForKey(
-            Function<Type, MapType> mapGetter,
-            Class<Alias> keyAliasType,
-            String keyAlias,
-            Function<Alias, Key> aliasKeyFunction,
-            ValueArgument valueArgument,
-            Function<ValueArgument, Value> valueArgumentValueFunction
-    )
-    {
-        return put(mapGetter, aliasKeyFunction.apply((Alias) aliasMap.get(keyAlias)), valueArgumentValueFunction.apply(valueArgument));
-    }
-
-    @Override
-    public <Alias, KeyArgument, Key, Value, MapType extends Map<Key, Value>> GenericBuilder putWithAliasForValue(
-            Function<Type, MapType> mapGetter,
-            KeyArgument keyArgument,
-            Function<KeyArgument, Key> keyArgumentKeyFunction,
-            Class<Alias> valueAliasType,
-            String valueAlias,
-            Function<Alias, Value> aliasValueFunction
-    )
-    {
-        return put(mapGetter, keyArgumentKeyFunction.apply(keyArgument), aliasValueFunction.apply((Alias) aliasMap.get(valueAlias)));
     }
 
     @Override
@@ -471,17 +350,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     }
 
     @Override
-    public <Item, Argument, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithBuilder(
-            Function<Type, MapType> mapGetter,
-            Argument keyArgument,
-            Function<Argument, Key> keyFunction,
-            NewBuilder builder
-    )
-    {
-        return putWithBuilder(mapGetter, keyFunction.apply(keyArgument), builder);
-    }
-
-    @Override
     public <Item, Alias, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithAliasForKeyAndBuilderForValue(
             Function<Type, MapType> mapGetter,
             Class<Alias> keyAliasType,
@@ -517,20 +385,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         return (NewBuilder) putWithBuilder(mapGetter, (Key) aliasMap.get(keyAlias), newBuilder);
-    }
-
-    @Override
-    public <Item, KeyArgument, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder put(
-            Function<Type, MapType> mapGetter,
-            KeyArgument keyArgument,
-            Function<KeyArgument, Key> keyArgumentKeyFunction,
-            NewBuilder valueBuilder,
-            Function<Item, Value> itemValueFunction
-    )
-    {
-        BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
-        newBuilder.parentFunctionForMapValue = itemValueFunction;
-        return (NewBuilder) putWithBuilder(mapGetter, keyArgumentKeyFunction.apply(keyArgument), newBuilder);
     }
 
     @Override
