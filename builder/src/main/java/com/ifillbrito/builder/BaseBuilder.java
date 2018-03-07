@@ -59,8 +59,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         Value value = (Value) aliasMap.get(alias);
-        if ( value == null )
-            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        verifyAlias(alias, value);
         return set(consumer, value);
     }
 
@@ -73,8 +72,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         Alias argument = (Alias) aliasMap.get(alias);
-        if ( argument == null )
-            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        verifyAlias(alias, argument);
         if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         return set(consumer, function.apply(argument));
     }
@@ -142,8 +140,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         Item item = (Item) aliasMap.get(alias);
-        if ( item == null )
-            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        verifyAlias(alias, item);
         return add(collectionGetter, item);
     }
 
@@ -157,8 +154,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
         Alias targetObject = (Alias) aliasMap.get(alias);
-        if ( targetObject == null )
-            throw new IllegalArgumentException("The alias " + alias + " has not been defined. The alias must be defined before it is used.");
+        verifyAlias(alias, targetObject);
         return add(collectionGetter, function.apply(targetObject));
     }
 
@@ -222,11 +218,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         Key key = (Key) aliasMap.get(keyAlias);
-        if ( key == null )
-            throw new IllegalArgumentException("The alias " + keyAlias + " has not been defined. The alias must be defined before it is used.");
+        verifyAlias(keyAlias, key);
         Value value = (Value) aliasMap.get(valueAlias);
-        if ( value == null )
-            throw new IllegalArgumentException("The alias " + valueAlias + " has not been defined. The alias must be defined before it is used.");
+        verifyAlias(valueAlias, value);
         return put(mapGetter, key, value);
     }
 
@@ -237,7 +231,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        return put(mapGetter, (Key) aliasMap.get(keyAlias), value);
+        Key key = (Key) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return put(mapGetter, key, value);
     }
 
     @Override
@@ -247,7 +243,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String valueAlias
     )
     {
-        return put(mapGetter, key, (Value) aliasMap.get(valueAlias));
+        Value value = (Value) aliasMap.get(valueAlias);
+        verifyAlias(valueAlias, value);
+        return put(mapGetter, key, value);
     }
 
     @Override
@@ -259,7 +257,11 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             String valueAlias
     )
     {
-        return put(mapGetter, aliasKeyFunction.apply((Alias) aliasMap.get(keyAlias)), (Value) aliasMap.get(valueAlias));
+        Alias key = (Alias) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        Value value = (Value) aliasMap.get(valueAlias);
+        verifyAlias(valueAlias, value);
+        return put(mapGetter, aliasKeyFunction.apply(key), value);
     }
 
     @Override
@@ -271,7 +273,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        return put(mapGetter, aliasKeyFunction.apply((Alias) aliasMap.get(keyAlias)), value);
+        Alias key = (Alias) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return put(mapGetter, aliasKeyFunction.apply(key), value);
     }
 
     @Override
@@ -283,7 +287,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Value> aliasValueFunction
     )
     {
-        return put(mapGetter, (Key) aliasMap.get(keyAlias), aliasValueFunction.apply((Alias) aliasMap.get(valueAlias)));
+        Key key = (Key) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        Alias value = (Alias) aliasMap.get(valueAlias);
+        return put(mapGetter, key, aliasValueFunction.apply(value));
     }
 
     @Override
@@ -295,7 +302,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Value> valueFunction
     )
     {
-        return put(mapGetter, key, valueFunction.apply((Alias) aliasMap.get(valueAlias)));
+        Alias value = (Alias) aliasMap.get(valueAlias);
+        verifyAlias(valueAlias, value);
+        return put(mapGetter, key, valueFunction.apply(value));
     }
 
     @Override
@@ -309,7 +318,11 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<ValueAlias, Value> valueAliasValueFunction
     )
     {
-        return put(mapGetter, keyAliasKeyFunction.apply((KeyAlias) aliasMap.get(keyAlias)), valueAliasValueFunction.apply((ValueAlias) aliasMap.get(valueAlias)));
+        KeyAlias key = (KeyAlias) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        ValueAlias value = (ValueAlias) aliasMap.get(valueAlias);
+        verifyAlias(valueAlias, value);
+        return put(mapGetter, keyAliasKeyFunction.apply(key), valueAliasValueFunction.apply(value));
     }
 
     @Override
@@ -346,7 +359,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             NewBuilder builder
     )
     {
-        return putWithBuilder(mapGetter, (Key) aliasMap.get(keyAlias), builder);
+        Key key = (Key) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return putWithBuilder(mapGetter, key, builder);
     }
 
     @Override
@@ -358,7 +373,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             NewBuilder builder
     )
     {
-        return putWithBuilder(mapGetter, aliasKeyFunction.apply((Alias) aliasMap.get(keyAlias)), builder);
+        Alias key = (Alias) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return putWithBuilder(mapGetter, aliasKeyFunction.apply(key), builder);
     }
 
     @Override
@@ -384,7 +401,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
-        return (NewBuilder) putWithBuilder(mapGetter, (Key) aliasMap.get(keyAlias), newBuilder);
+        Key key = (Key) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return (NewBuilder) putWithBuilder(mapGetter, key, newBuilder);
     }
 
     @Override
@@ -399,7 +418,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
-        return (NewBuilder) putWithBuilder(mapGetter, aliasKeyFunction.apply((Alias) aliasMap.get(keyAlias)), newBuilder);
+        Alias key = (Alias) aliasMap.get(keyAlias);
+        verifyAlias(keyAlias, key);
+        return (NewBuilder) putWithBuilder(mapGetter, aliasKeyFunction.apply(key), newBuilder);
     }
 
     @Override
@@ -460,5 +481,13 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
                     "This builder was called from another builder. " +
                             "Call the build() method of the parent builder.");
         return object;
+    }
+
+    // private methods
+
+    protected <T> void verifyAlias(String aliasName, T alias)
+    {
+        if ( alias == null )
+            throw new IllegalArgumentException("The alias " + aliasName + " has not been defined. The alias must be defined before it is used.");
     }
 }

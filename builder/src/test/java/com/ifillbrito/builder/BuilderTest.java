@@ -89,7 +89,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_nonDefinedAlias_exception()
+    public void setWithAlias_invalidAlias_exception()
     {
         Builder.of(new ObjectA())
                 .as("alias")
@@ -336,7 +336,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_nonDefinedAlias_exception()
+    public void addWithAlias_invalidAlias_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -359,7 +359,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_nonDefinedAliasAndFunction_exception()
+    public void addWithAlias_invalidAliasAndFunction_exception()
     {
         Builder.of(new ObjectA())
                 .as("a")
@@ -539,7 +539,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAlias_nonDefinedKeyAlias_exception()
+    public void putWithAlias_invalidKeyAlias_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -553,7 +553,7 @@ public class BuilderTest
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAlias_nonDefinedValueAlias_exception()
+    public void putWithAlias_invalidValueAlias_exception()
     {
         //@formatter:off
         Builder.of(new ObjectA())
@@ -608,7 +608,7 @@ public class BuilderTest
         ObjectB objectB = new ObjectB();
         objectB.setText("object b");
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
+        Builder.of(new ObjectA())
                 .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
@@ -623,7 +623,7 @@ public class BuilderTest
         ObjectB objectB = new ObjectB();
         objectB.setText("object b");
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
+        Builder.of(new ObjectA())
                 .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
@@ -635,21 +635,167 @@ public class BuilderTest
     @Test
     public void putWithAliasForValue()
     {
+        ObjectA objectAForKey = new ObjectA();
+        objectAForKey.setText("key");
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "object b")
+                    .toParent(ObjectA.class)
+                .putWithAliasForValue(ObjectA::getObjectsMap, objectAForKey, "value")
+                .build();
+        //@formatter:on
+
+        Map<ObjectA, ObjectB> map = objectA.getObjectsMap();
+        ObjectB value = map.get(objectAForKey);
+        assertEquals("object b", value.getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForValue_nullGetter_exception()
+    {
+        ObjectA objectAForKey = new ObjectA();
+        objectAForKey.setText("key");
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "object b")
+                    .toParent(ObjectA.class)
+                .putWithAliasForValue(null, objectAForKey, "value")
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForValue_invalidValueAlias_exception()
+    {
+        ObjectA objectAForKey = new ObjectA();
+        objectAForKey.setText("key");
+        //@formatter:off
+        Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "object b")
+                    .toParent(ObjectA.class)
+                .putWithAliasForValue(ObjectA::getObjectsMap, objectAForKey, "invalidKey")
+                .build();
+        //@formatter:on
     }
 
     @Test
-    public void put1()
+    public void putWithAliases()
     {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("objectA")
+                    .set(ObjectA::setText, "the key")
+                    .toParent(ObjectA.class)
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me -> me, "value")
+                .build();
+        //@formatter:on
+
+        ObjectA key = objectA.getObjectA();
+        ObjectB objectB = objectA.getObjectsMap().get(key);
+        assertEquals("objectB", objectB.getText());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliases_nullGetter_exception()
+    {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("objectA")
+                    .set(ObjectA::setText, "the key")
+                    .toParent(ObjectA.class)
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAlias(null, ObjectA.class, "objectA", me -> me, "value")
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliases_invalidKeyAlias_exception()
+    {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("objectA")
+                    .set(ObjectA::setText, "the key")
+                    .toParent(ObjectA.class)
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "invalidKey", me -> me, "value")
+                .build();
+        //@formatter:on
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliases_invalidValueAlias_exception()
+    {
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("objectA")
+                    .set(ObjectA::setText, "the key")
+                    .toParent(ObjectA.class)
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me -> me, "invalidKey")
+                .build();
+        //@formatter:on
     }
 
     @Test
-    public void putWithAliases1()
+    public void putWithAliasForKey_function()
     {
+        ObjectB objectB = new ObjectB();
+        objectB.setText("objectB");
+
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("objectA")
+                    .set(ObjectA::setText, "the key")
+                    .toParent(ObjectA.class)
+                .putWithAliasForKey(ObjectA::getObjectsMap, ObjectA.class, "objectA", me -> me, objectB)
+                .build();
+        //@formatter:on
+
+        ObjectA key = objectA.getObjectA();
+        ObjectB expectedB = objectA.getObjectsMap().get(key);
+        assertEquals("objectB", expectedB.getText());
     }
 
-    @Test
-    public void putWithAliasForKey1()
+    @Test(expected = IllegalArgumentException.class)
+    public void putWithAliasForKey_function_invalidKey()
     {
+        ObjectB objectB = new ObjectB();
+        objectB.setText("objectB");
+
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+                    .as("objectA")
+                    .set(ObjectA::setText, "the key")
+                    .toParent(ObjectA.class)
+                .putWithAliasForKey(ObjectA::getObjectsMap, ObjectA.class, "invalidKey", me -> me, objectB)
+                .build();
+        //@formatter:on
     }
 
     @Test
