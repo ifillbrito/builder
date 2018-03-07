@@ -15,7 +15,7 @@ public class BuilderTest_Maps
     @Test
     public void put()
     {
-        ObjectA objectA = Builder.of(new ObjectA())
+        ObjectA objectA = new Builder<>(new ObjectA())
                 .set(ObjectA::setMap, new HashMap<>())
                 .put(ObjectA::getMap, "key", 1)
                 .build();
@@ -26,7 +26,7 @@ public class BuilderTest_Maps
     @Test(expected = IllegalArgumentException.class)
     public void put_nullGetter_exception()
     {
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .set(ObjectA::setMap, new HashMap<>())
                 .put(null, "key", 1)
                 .build();
@@ -36,7 +36,7 @@ public class BuilderTest_Maps
     public void put_toNullMap_exception()
     {
         // The map in ObjectA is not initialized.
-        Builder.of(new ObjectA())
+        new Builder<>(new ObjectA())
                 .put(ObjectA::getMap, "key", 1)
                 .build();
     }
@@ -45,11 +45,11 @@ public class BuilderTest_Maps
     public void putWithAlias()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "the value")
                     .toParent(ObjectA.class)
@@ -67,8 +67,8 @@ public class BuilderTest_Maps
     public void putWithAlias_invalidKeyAlias_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "the value")
                     .toParent(ObjectA.class)
@@ -81,8 +81,8 @@ public class BuilderTest_Maps
     public void putWithAlias_invalidValueAlias_exception()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
                 .putWithAlias(ObjectA::getObjectsMap, "key", "value")
@@ -94,11 +94,11 @@ public class BuilderTest_Maps
     public void putWithAlias_nullGetter()
     {
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "the value")
                     .toParent(ObjectA.class)
@@ -113,8 +113,8 @@ public class BuilderTest_Maps
         ObjectB objectB = new ObjectB();
         objectB.setText("object b");
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
                 .putWithAliasForKey(ObjectA::getObjectsMap, "key", objectB)
@@ -133,8 +133,8 @@ public class BuilderTest_Maps
         ObjectB objectB = new ObjectB();
         objectB.setText("object b");
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
                 .putWithAliasForKey(null, "key", objectB)
@@ -148,8 +148,8 @@ public class BuilderTest_Maps
         ObjectB objectB = new ObjectB();
         objectB.setText("object b");
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
                 .putWithAliasForKey(null, "KEY", objectB)
@@ -163,8 +163,8 @@ public class BuilderTest_Maps
         ObjectA objectAForKey = new ObjectA();
         objectAForKey.setText("key");
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "object b")
                     .toParent(ObjectA.class)
@@ -183,8 +183,8 @@ public class BuilderTest_Maps
         ObjectA objectAForKey = new ObjectA();
         objectAForKey.setText("key");
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "object b")
                     .toParent(ObjectA.class)
@@ -199,8 +199,8 @@ public class BuilderTest_Maps
         ObjectA objectAForKey = new ObjectA();
         objectAForKey.setText("key");
         //@formatter:off
-        Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+        new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "object b")
                     .toParent(ObjectA.class)
@@ -213,12 +213,12 @@ public class BuilderTest_Maps
     public void putWithAliases()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -235,12 +235,12 @@ public class BuilderTest_Maps
     public void putWithAliases_nullGetter_exception()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -253,12 +253,12 @@ public class BuilderTest_Maps
     public void putWithAliases_invalidKeyAlias_exception()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -271,12 +271,12 @@ public class BuilderTest_Maps
     public void putWithAliases_invalidValueAlias_exception()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -292,8 +292,8 @@ public class BuilderTest_Maps
         objectB.setText("objectB");
 
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
@@ -313,8 +313,8 @@ public class BuilderTest_Maps
         objectB.setText("objectB");
 
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
@@ -337,12 +337,12 @@ public class BuilderTest_Maps
     public void putWithAliases2()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -359,12 +359,12 @@ public class BuilderTest_Maps
     public void putWithAliases2_nullMapGetter()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -377,12 +377,12 @@ public class BuilderTest_Maps
     public void putWithAliases2_invalidKeyAlias()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -395,12 +395,12 @@ public class BuilderTest_Maps
     public void putWithAliases2_invalidValueAlias()
     {
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, Builder.of(new ObjectA()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
@@ -415,8 +415,8 @@ public class BuilderTest_Maps
         ObjectA key = new ObjectA();
 
         //@formatter:off
-        ObjectA objectA = Builder.of(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+        ObjectA objectA = new Builder<>(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)

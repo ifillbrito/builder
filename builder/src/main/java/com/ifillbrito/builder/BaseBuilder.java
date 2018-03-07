@@ -25,7 +25,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     protected Function parentFunctionForMapValue;
     protected Map<String, Object> aliasMap = new HashMap<>();
 
-    protected BaseBuilder(Type object)
+    public BaseBuilder(Type object)
     {
         this.object = object;
     }

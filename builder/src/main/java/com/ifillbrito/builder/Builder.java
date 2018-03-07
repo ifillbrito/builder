@@ -5,13 +5,8 @@ package com.ifillbrito.builder;
  */
 public class Builder<Type> extends BaseBuilder<Type, Builder<Type>>
 {
-    protected Builder(Type object)
+    public Builder(Type object)
     {
         super(object);
-    }
-
-    public static <T> Builder<T> of(T object)
-    {
-        return new Builder<>(object);
     }
 }
