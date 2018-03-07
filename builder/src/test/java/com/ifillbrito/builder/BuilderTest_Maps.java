@@ -410,13 +410,22 @@ public class BuilderTest_Maps
     }
 
     @Test
-    public void putWithAliasForKey2()
-    {
-    }
-
-    @Test
     public void putWithAliasForValue2()
     {
+        ObjectA key = new ObjectA();
+
+        //@formatter:off
+        ObjectA objectA = Builder.of(new ObjectA())
+                .setWithBuilder(ObjectA::setObjectB, Builder.of(new ObjectB()))
+                    .as("value")
+                    .set(ObjectB::setText, "objectB")
+                    .toParent(ObjectA.class)
+                .putWithAliasForValue(ObjectA::getObjectsMap, key, ObjectB.class, "value" , me -> me)
+                .build();
+        //@formatter:on
+
+        ObjectB objectB = objectA.getObjectsMap().get(key);
+        assertEquals("objectB", objectB.getText());
     }
 
     @Test
