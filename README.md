@@ -1,3 +1,6 @@
+[![travis-ci](https://travis-ci.org/ifillbrito/builder.svg?branch=master)](https://travis-ci.org/ifillbrito/builder)
+[![codecov](https://codecov.io/gh/ifillbrito/builder/branch/master/graph/badge.svg)](https://codecov.io/gh/ifillbrito/builder)
+
 This project provides a generic builder that can be used as it is for any object. However, it is recommended to extend the ``BaseBuilder`` class to assign more appropiate names to the builder methods and improve the code readability. The builder uses method reference to setup the values in the target object.
 
 ## Features
