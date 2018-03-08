@@ -3,6 +3,7 @@ sudo: false
 
 before_script: cd builder
 script: "mvn cobertura:cobertura"
+after_script: cd ..
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
