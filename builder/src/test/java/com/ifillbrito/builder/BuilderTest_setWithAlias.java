@@ -2,7 +2,8 @@ package com.ifillbrito.builder;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by gjib on 25.01.18.
@@ -25,7 +26,7 @@ public class BuilderTest_setWithAlias
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_nullSetter()
+    public void setWithAlias_nullSetter_exception()
     {
         new Builder<>(new ObjectA())
                 .as("alias")
@@ -35,7 +36,7 @@ public class BuilderTest_setWithAlias
     }
 
     @Test
-    public void setWithAlias_nullAlias_positive()
+    public void setWithAlias_nullAlias()
     {
         ObjectA objectA = new Builder<>(new ObjectA())
                 .as(null)
@@ -91,7 +92,7 @@ public class BuilderTest_setWithAlias
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithAlias_nullSetter_exception()
+    public void setWithAlias_nullSetter2_exception()
     {
         new Builder<>(new ObjectA())
                 .as("a")

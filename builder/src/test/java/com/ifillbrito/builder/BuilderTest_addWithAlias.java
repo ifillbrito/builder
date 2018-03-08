@@ -3,7 +3,6 @@ package com.ifillbrito.builder;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,16 +23,6 @@ public class BuilderTest_addWithAlias
         assertEquals("object a", objectA.getObjectsA().get(0).getText());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_invalidAlias_exception()
-    {
-        new Builder<>(new ObjectA())
-                .as("a")
-                .set(ObjectA::setText, "object a")
-                .addWithAlias(ObjectA::getObjectsA, "b")
-                .build();
-    }
-
     @Test
     public void addWithAlias_function()
     {
@@ -45,17 +34,6 @@ public class BuilderTest_addWithAlias
                 .build();
 
         assertEquals("object a", objectA.getList().get(0));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void addWithAlias_invalidAliasAndFunction_exception()
-    {
-        new Builder<>(new ObjectA())
-                .as("a")
-                .set(ObjectA::setText, "object a")
-                .set(ObjectA::setList, new ArrayList<>())
-                .addWithAlias(ObjectA::getList, ObjectA.class, "b", ObjectA::getText)
-                .build();
     }
 
     @Test(expected = IllegalArgumentException.class)

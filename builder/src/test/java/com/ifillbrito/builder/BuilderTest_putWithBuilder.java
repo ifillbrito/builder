@@ -76,21 +76,6 @@ public class BuilderTest_putWithBuilder
         assertEquals("objectB", objectA.getObjectAObjectBMap().get(key).getText());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void putWithAliasForKeyAndBuilderForValue_invalidKeyAlias_exception()
-    {
-        //@formatter:off
-        ObjectA objectA = new Builder<>(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
-                    .as("key")
-                    .toParent(ObjectA.class)
-                .putWithAliasForKeyAndBuilderForValue(ObjectA::getObjectAObjectBMap, "invalidKeyAlias", new Builder<>(new ObjectB()))
-                    .set(ObjectB::setText, "objectB")
-                    .toParent(ObjectA.class)
-                .build();
-        //@formatter:on
-    }
-
     @Test
     public void putWithAliasForKeyAndBuilderForValue_aliasKeyFunction()
     {
@@ -110,25 +95,6 @@ public class BuilderTest_putWithBuilder
         //@formatter:on
 
         assertEquals(1, objectA.getStringObjectAMap().get("objectA").getNumber());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void putWithAliasForKeyAndBuilderForValue_aliasKeyFunction_invalidAlias_exception()
-    {
-        //@formatter:off
-        new Builder<>(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
-                    .as("key")
-                    .set(ObjectA::setText, "objectA")
-                    .toParent(ObjectA.class)
-                .putWithAliasForKeyAndBuilderForValue(
-                        ObjectA::getStringObjectAMap,
-                        ObjectA.class,"invalidKeyAlias", ObjectA::getText,
-                        new Builder<>(new ObjectA()))
-                    .set(ObjectA::setNumber, 1)
-                    .toParent(ObjectA.class)
-                .build();
-        //@formatter:on
     }
 
     @Test
@@ -153,7 +119,7 @@ public class BuilderTest_putWithBuilder
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithBuilder_itemValueFunction_nullFunction()
+    public void putWithBuilder_itemValueFunction_nullFunction_exception()
     {
         //@formatter:off
         new Builder<>(new ObjectA())
@@ -207,25 +173,6 @@ public class BuilderTest_putWithBuilder
         //@formatter:on
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void putWithAliasForKeyAndBuilderForValue_itemValueFunction_invalidKeyAlias_exception()
-    {
-        //@formatter:off
-        new Builder<>(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
-                    .as("key")
-                    .toParent(ObjectA.class)
-                .putWithAliasForKeyAndBuilderForValue(
-                        ObjectA::getObjectAObjectBMap,
-                        "invalidKeyAlias",
-                        new Builder<>(new ObjectB()),
-                        me -> me)
-                    .set(ObjectB::setText, "objectB")
-                    .toParent(ObjectA.class)
-                .build();
-        //@formatter:on
-    }
-
     @Test
     public void putWithAliasForKeyAndBuilderForValue_functions()
     {
@@ -249,7 +196,7 @@ public class BuilderTest_putWithBuilder
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAliasForKeyAndBuilderForValue_functions_nullAliasKeyFunction()
+    public void putWithAliasForKeyAndBuilderForValue_functions_nullAliasKeyFunction_exception()
     {
         //@formatter:off
         new Builder<>(new ObjectA())
@@ -269,7 +216,7 @@ public class BuilderTest_putWithBuilder
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putWithAliasForKeyAndBuilderForValue_functions_nullItemValueFunction()
+    public void putWithAliasForKeyAndBuilderForValue_functions_nullItemValueFunction_exception()
     {
         //@formatter:off
         new Builder<>(new ObjectA())
@@ -282,26 +229,6 @@ public class BuilderTest_putWithBuilder
                         ObjectA.class,"key", ObjectA::getText,
                         new Builder<>(new ObjectA()),
                         null)
-                    .set(ObjectA::setNumber, 1)
-                    .toParent(ObjectA.class)
-                .build();
-        //@formatter:on
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void putWithAliasForKeyAndBuilderForValue_functions_invalidKeyAlias()
-    {
-        //@formatter:off
-        new Builder<>(new ObjectA())
-                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
-                    .as("key")
-                    .set(ObjectA::setText, "objectA")
-                    .toParent(ObjectA.class)
-                .putWithAliasForKeyAndBuilderForValue(
-                        ObjectA::getStringObjectAMap,
-                        ObjectA.class,"invalidKeyAlias", ObjectA::getText,
-                        new Builder<>(new ObjectA()),
-                        me -> me)
                     .set(ObjectA::setNumber, 1)
                     .toParent(ObjectA.class)
                 .build();
