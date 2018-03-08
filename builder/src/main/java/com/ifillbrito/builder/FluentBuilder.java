@@ -177,7 +177,7 @@ public interface FluentBuilder<Type, GenericBuilder extends FluentBuilder<Type, 
             Function<Type, MapType> mapGetter,
             String keyAlias,
             NewBuilder valueBuilder,
-            Function<Item, Key> valueFunction
+            Function<Item, Value> valueFunction
     );
 
     <Item, Alias, Key, Value, MapType extends Map<Key, Value>, NewBuilder extends FluentBuilder<Item, NewBuilder>> NewBuilder putWithAliasForKeyAndBuilderForValue(

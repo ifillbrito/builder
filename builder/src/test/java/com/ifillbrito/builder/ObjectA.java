@@ -17,8 +17,9 @@ public class ObjectA
     private List<String> list;
     private List<ObjectA> objectsA = new ArrayList<>();
     private List<ObjectB> objectsB = new ArrayList<>();
-    private Map<String, Integer> map;
-    private Map<ObjectA, ObjectB> objectsMap = new HashMap<>();
+    private Map<String, Integer> stringIntegerMap;
+    private Map<ObjectA, ObjectB> objectAObjectBMap = new HashMap<>();
+    private Map<String, ObjectA> stringObjectAMap = new HashMap<>();
 
     public String getText()
     {
@@ -90,23 +91,28 @@ public class ObjectA
         this.objectsB = objectsB;
     }
 
-    public Map<String, Integer> getMap()
+    public Map<String, Integer> getStringIntegerMap()
     {
-        return map;
+        return stringIntegerMap;
     }
 
-    public void setMap(Map<String, Integer> map)
+    public void setStringIntegerMap(Map<String, Integer> stringIntegerMap)
     {
-        this.map = map;
+        this.stringIntegerMap = stringIntegerMap;
     }
 
-    public Map<ObjectA, ObjectB> getObjectsMap()
+    public Map<ObjectA, ObjectB> getObjectAObjectBMap()
     {
-        return objectsMap;
+        return objectAObjectBMap;
     }
 
-    public void setObjectsMap(Map<ObjectA, ObjectB> objectsMap)
+    public Map<String, ObjectA> getStringObjectAMap()
     {
-        this.objectsMap = objectsMap;
+        return stringObjectAMap;
+    }
+
+    public void setStringObjectAMap(Map<String, ObjectA> stringObjectAMap)
+    {
+        this.stringObjectAMap = stringObjectAMap;
     }
 }

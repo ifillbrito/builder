@@ -2,7 +2,6 @@ package com.ifillbrito.builder;
 
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -24,12 +23,12 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "the value")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, "key", "value")
+                .putWithAlias(ObjectA::getObjectAObjectBMap, "key", "value")
                 .build();
         //@formatter:on
 
         ObjectA key = objectA.getObjectA();
-        Map<ObjectA, ObjectB> map = objectA.getObjectsMap();
+        Map<ObjectA, ObjectB> map = objectA.getObjectAObjectBMap();
         ObjectB value = map.get(key);
         assertEquals("the value", value.getText());
     }
@@ -43,7 +42,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "the value")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, "key", "value")
+                .putWithAlias(ObjectA::getObjectAObjectBMap, "key", "value")
                 .build();
         //@formatter:on
     }
@@ -56,7 +55,7 @@ public class BuilderTest_putWithAlias
                 .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, "key", "value")
+                .putWithAlias(ObjectA::getObjectAObjectBMap, "key", "value")
                 .build();
         //@formatter:on
     }
@@ -88,12 +87,12 @@ public class BuilderTest_putWithAlias
                 .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
                     .as("key")
                     .toParent(ObjectA.class)
-                .putWithAliasForKey(ObjectA::getObjectsMap, "key", objectB)
+                .putWithAliasForKey(ObjectA::getObjectAObjectBMap, "key", objectB)
                 .build();
         //@formatter:on
 
         ObjectA key = objectA.getObjectA();
-        Map<ObjectA, ObjectB> map = objectA.getObjectsMap();
+        Map<ObjectA, ObjectB> map = objectA.getObjectAObjectBMap();
         ObjectB value = map.get(key);
         assertEquals("object b", value.getText());
     }
@@ -139,11 +138,11 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "object b")
                     .toParent(ObjectA.class)
-                .putWithAliasForValue(ObjectA::getObjectsMap, objectAForKey, "value")
+                .putWithAliasForValue(ObjectA::getObjectAObjectBMap, objectAForKey, "value")
                 .build();
         //@formatter:on
 
-        Map<ObjectA, ObjectB> map = objectA.getObjectsMap();
+        Map<ObjectA, ObjectB> map = objectA.getObjectAObjectBMap();
         ObjectB value = map.get(objectAForKey);
         assertEquals("object b", value.getText());
     }
@@ -175,7 +174,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "object b")
                     .toParent(ObjectA.class)
-                .putWithAliasForValue(ObjectA::getObjectsMap, objectAForKey, "invalidKey")
+                .putWithAliasForValue(ObjectA::getObjectAObjectBMap, objectAForKey, "invalidKey")
                 .build();
         //@formatter:on
     }
@@ -193,12 +192,12 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me -> me, "value")
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", me -> me, "value")
                 .build();
         //@formatter:on
 
         ObjectA key = objectA.getObjectA();
-        ObjectB objectB = objectA.getObjectsMap().get(key);
+        ObjectB objectB = objectA.getObjectAObjectBMap().get(key);
         assertEquals("objectB", objectB.getText());
     }
 
@@ -233,7 +232,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "invalidKey", me -> me, "value")
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "invalidKey", me -> me, "value")
                 .build();
         //@formatter:on
     }
@@ -251,7 +250,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me -> me, "invalidKey")
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", me -> me, "invalidKey")
                 .build();
         //@formatter:on
     }
@@ -268,12 +267,12 @@ public class BuilderTest_putWithAlias
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .putWithAliasForKey(ObjectA::getObjectsMap, ObjectA.class, "objectA", me -> me, objectB)
+                .putWithAliasForKey(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", me -> me, objectB)
                 .build();
         //@formatter:on
 
         ObjectA key = objectA.getObjectA();
-        ObjectB expectedB = objectA.getObjectsMap().get(key);
+        ObjectB expectedB = objectA.getObjectAObjectBMap().get(key);
         assertEquals("objectB", expectedB.getText());
     }
 
@@ -289,7 +288,7 @@ public class BuilderTest_putWithAlias
                     .as("objectA")
                     .set(ObjectA::setText, "the key")
                     .toParent(ObjectA.class)
-                .putWithAliasForKey(ObjectA::getObjectsMap, ObjectA.class, "invalidKey", me -> me, objectB)
+                .putWithAliasForKey(ObjectA::getObjectAObjectBMap, ObjectA.class, "invalidKey", me -> me, objectB)
                 .build();
         //@formatter:on
     }
@@ -317,12 +316,12 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, "objectA", ObjectB.class, "value" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, "objectA", ObjectB.class, "value" , me -> me)
                 .build();
         //@formatter:on
 
         ObjectA key = objectA.getObjectA();
-        ObjectB objectB = objectA.getObjectsMap().get(key);
+        ObjectB objectB = objectA.getObjectAObjectBMap().get(key);
         assertEquals("objectB", objectB.getText());
     }
 
@@ -357,7 +356,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, "invalidKey", ObjectB.class, "value" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, "invalidKey", ObjectB.class, "value" , me -> me)
                 .build();
         //@formatter:on
     }
@@ -375,7 +374,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, "objectA", ObjectB.class, "invalidKey" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, "objectA", ObjectB.class, "invalidKey" , me -> me)
                 .build();
         //@formatter:on
     }
@@ -391,11 +390,11 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAliasForValue(ObjectA::getObjectsMap, key, ObjectB.class, "value" , me -> me)
+                .putWithAliasForValue(ObjectA::getObjectAObjectBMap, key, ObjectB.class, "value" , me -> me)
                 .build();
         //@formatter:on
 
-        ObjectB objectB = objectA.getObjectsMap().get(key);
+        ObjectB objectB = objectA.getObjectAObjectBMap().get(key);
         assertEquals("objectB", objectB.getText());
     }
 
@@ -426,7 +425,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAliasForValue(ObjectA::getObjectsMap, key, ObjectB.class, "invalidAlias" , me -> me)
+                .putWithAliasForValue(ObjectA::getObjectAObjectBMap, key, ObjectB.class, "invalidAlias" , me -> me)
                 .build();
         //@formatter:on
     }
@@ -444,12 +443,12 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me->me, ObjectB.class, "value" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", me->me, ObjectB.class, "value" , me -> me)
                 .build();
         //@formatter:on
 
         ObjectA key = objectA.getObjectA();
-        ObjectB objectB = objectA.getObjectsMap().get(key);
+        ObjectB objectB = objectA.getObjectAObjectBMap().get(key);
         assertEquals("objectB", objectB.getText());
     }
 
@@ -484,7 +483,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "invalidKeyAlias", me->me, ObjectB.class, "value" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "invalidKeyAlias", me->me, ObjectB.class, "value" , me -> me)
                 .build();
         //@formatter:on
     }
@@ -502,7 +501,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", null, ObjectB.class, "value" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", null, ObjectB.class, "value" , me -> me)
                 .build();
         //@formatter:on
     }
@@ -520,7 +519,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me->me, ObjectB.class, "invalidValueAlias" , me -> me)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", me->me, ObjectB.class, "invalidValueAlias" , me -> me)
                 .build();
         //@formatter:on
     }
@@ -538,7 +537,7 @@ public class BuilderTest_putWithAlias
                     .as("value")
                     .set(ObjectB::setText, "objectB")
                     .toParent(ObjectA.class)
-                .putWithAlias(ObjectA::getObjectsMap, ObjectA.class, "objectA", me->me, ObjectB.class, "value" , null)
+                .putWithAlias(ObjectA::getObjectAObjectBMap, ObjectA.class, "objectA", me->me, ObjectB.class, "value" , null)
                 .build();
         //@formatter:on
     }

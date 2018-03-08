@@ -2,6 +2,8 @@ package com.ifillbrito.builder;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 /**
@@ -9,6 +11,31 @@ import static org.junit.Assert.*;
  */
 public class BuilderTest_setWithBuilder
 {
+    @Test
+    public void getAliasMap()
+    {
+        //@formatter:off
+        Map<String,Object> aliasMap = new Builder<>(new ObjectA())
+                .as("root")
+                .setWithBuilder(ObjectA::setObjectB, new Builder<>(new ObjectB()))
+                    .as("b")
+                    .set(ObjectB::setText, "object B")
+                    .toParent(ObjectA.class) // use this to tell the compiler the parent type
+                .setWithBuilder(ObjectA::setObjectA, new Builder<>(new ObjectA()))
+                    .as("a")
+                    .set(ObjectA::setText, "object A")
+                    .toParent() // use this if the parent type is the same as the child type
+                .getAliasMap();
+        //@formatter:on
+
+        ObjectA root = (ObjectA) aliasMap.get("root");
+        Object a = aliasMap.get("a");
+        Object b = aliasMap.get("b");
+
+        assertEquals(root.getObjectA(), a);
+        assertEquals(root.getObjectB(), b);
+    }
+
     @Test
     public void setWithBuilder()
     {

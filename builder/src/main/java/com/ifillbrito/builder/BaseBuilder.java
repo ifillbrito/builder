@@ -316,7 +316,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             MapType map
     )
     {
+        if ( mapGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
         MapType targetMap = mapGetter.apply(object);
+        if ( targetMap == null ) throw new NullPointerException("The target map is null.");
         targetMap.putAll(map);
         return (GenericBuilder) this;
     }
@@ -331,7 +333,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
-        newBuilder.parentMap = mapGetter.apply(object);
+        if ( mapGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        MapType targetMap = mapGetter.apply(object);
+        if ( targetMap == null ) throw new NullPointerException("The target map is null.");
+        newBuilder.parentMap = targetMap;
         newBuilder.parentSetterType = ParentSetterType.MAP;
         newBuilder.parentKey = key;
         return (NewBuilder) newBuilder;
@@ -369,6 +374,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Item, Value> itemValueFunction
     )
     {
+        if ( itemValueFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         return (NewBuilder) putWithBuilder(mapGetter, key, newBuilder);
@@ -379,9 +385,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Type, MapType> mapGetter,
             String keyAlias,
             NewBuilder valueBuilder,
-            Function<Item, Key> itemValueFunction
+            Function<Item, Value> itemValueFunction
     )
     {
+        if ( itemValueFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         Key key = (Key) getByAlias(keyAlias);
@@ -398,6 +405,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Item, Value> itemValueFunction
     )
     {
+        if ( itemValueFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
+        if ( aliasKeyFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         Alias key = (Alias) getByAlias(keyAlias);
@@ -459,8 +468,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         if ( parentSetterType != null )
             throw new UnsupportedOperationException(
-                    "This builder was called from another builder. " +
-                            "Call the build() method of the parent builder.");
+                    "This builder was created from another builder. " +
+                            "Call the build() method of the root builder.");
         return object;
     }
 
