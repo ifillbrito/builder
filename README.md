@@ -12,7 +12,7 @@ This project provides a generic builder that can be used as it is for any object
 For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/builder/tree/31b815cea1a8f8a791c4640aa4706a2c2d9f5775/builder/src/test/java/com/github/ifillbrito/builder'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
 
 ## Download
-Jitpack [![](https://jitpack.io/v/ifillbrito/builder.svg)](https://jitpack.io/#ifillbrito/builder)
+[![](https://jitpack.io/v/ifillbrito/builder.svg)](https://jitpack.io/#ifillbrito/builder)
 ```xml
 ...
 <repositories>
