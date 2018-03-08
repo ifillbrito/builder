@@ -21,7 +21,6 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     protected Collection parentCollection;
     protected Map parentMap;
     protected Object parentKey;
-    protected Function parentFunctionForMapKey;
     protected Function parentFunctionForMapValue;
     protected Map<String, Object> aliasMap = new HashMap<>();
 
@@ -84,6 +83,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
+        if ( consumer == null ) throw new IllegalArgumentException("The setter cannot be null.");
         newBuilder.parentConsumer = consumer;
         newBuilder.parentSetterType = ParentSetterType.OBJECT;
         newBuilder.parentObject = object;
@@ -432,29 +432,20 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         switch ( parentSetterType )
         {
             case OBJECT:
-                if ( parentConsumer == null )
-                    throw new IllegalArgumentException("The setter of the parent builder cannot be null.");
                 if ( parentFunctionForConsumer == null ) parentConsumer.accept(parentObject, object);
                 else parentConsumer.accept(parentObject, parentFunctionForConsumer.apply(object));
-                return (ParentBuilder) parent;
+                break;
 
             case COLLECTION:
                 if ( parentFunctionForConsumer == null ) parentCollection.add(object);
                 else parentCollection.add(parentFunctionForConsumer.apply(object));
-                return (ParentBuilder) parent;
+                break;
+
             case MAP:
-                if ( parentMap == null )
-                    throw new IllegalArgumentException("The map getter of the parent builder cannot be null.");
-                if ( parentFunctionForMapKey == null && parentFunctionForMapValue == null )
-                    parentMap.put(parentKey, object);
-                else if ( parentFunctionForMapKey != null && parentFunctionForMapValue == null )
-                    parentMap.put(parentFunctionForMapKey.apply(parentKey), object);
-                else if ( parentFunctionForMapKey == null )
-                    parentMap.put(parentKey, parentFunctionForMapValue.apply(object));
-                else parentMap.put(parentFunctionForMapKey.apply(parentKey), parentFunctionForMapValue.apply(object));
-                return (ParentBuilder) parent;
+                if ( parentFunctionForMapValue == null ) parentMap.put(parentKey, object);
+                else parentMap.put(parentKey, parentFunctionForMapValue.apply(object));
         }
-        throw new RuntimeException("[Internal Error] No parentSetterType was defined.");
+        return (ParentBuilder) parent;
     }
 
     @Override
