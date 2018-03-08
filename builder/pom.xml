@@ -6,8 +6,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ifillbrito.builder</groupId>
     <artifactId>builder</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
+    <name>Generic Builder</name>
+    <description>
+        This library provides a generic builder that supports internal references, adding elements to
+        collections and maps (nested builders) and applying functions to internal builders
+    </description>
+    <url>https://github.com/ifillbrito/builder</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -84,7 +90,7 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
-                    <check />
+                    <check/>
                 </configuration>
             </plugin>
         </plugins>
