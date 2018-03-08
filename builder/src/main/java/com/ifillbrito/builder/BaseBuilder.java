@@ -46,7 +46,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        if ( consumer == null ) throw new IllegalArgumentException("The setter cannot be null.");
+        verifySetter(consumer);
         consumer.accept(object, value);
         return (GenericBuilder) this;
     }
@@ -70,7 +70,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     )
     {
         Alias argument = (Alias) getByAlias(alias);
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
+        verifyFunction(function);
         return set(consumer, function.apply(argument));
     }
 
@@ -83,7 +83,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
-        if ( consumer == null ) throw new IllegalArgumentException("The setter cannot be null.");
+        verifySetter(consumer);
         newBuilder.parentConsumer = consumer;
         newBuilder.parentSetterType = ParentSetterType.OBJECT;
         newBuilder.parentObject = object;
@@ -97,7 +97,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<NewType, Value> function
     )
     {
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
+        verifyFunction(function);
         BaseBuilder newBuilder = (BaseBuilder) setWithBuilder(consumer, builder);
         newBuilder.parentFunctionForConsumer = function;
         return (NewBuilder) newBuilder;
@@ -110,9 +110,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Item value
     )
     {
-        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        verifyGetter(collectionGetter);
         ListOrSet targetCollection = collectionGetter.apply(object);
-        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
+        verifyTargetCollection(targetCollection);
         targetCollection.add(value);
         return (GenericBuilder) this;
     }
@@ -123,10 +123,10 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             ListOrSet collection
     )
     {
-        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
-        if ( collection == null ) throw new IllegalArgumentException("The collection cannot be null.");
+        verifyGetter(collectionGetter);
+        verifyCollection(collection);
         ListOrSet targetCollection = collectionGetter.apply(object);
-        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
+        verifyTargetCollection(targetCollection);
         targetCollection.addAll(collection);
         return (GenericBuilder) this;
     }
@@ -149,7 +149,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Alias, Item> function
     )
     {
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
+        verifyFunction(function);
         Alias targetObject = (Alias) getByAlias(alias);
         return add(collectionGetter, function.apply(targetObject));
     }
@@ -160,8 +160,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             NewBuilder builder
     )
     {
-        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
-        if ( builder == null ) throw new IllegalArgumentException("The builder cannot be null.");
+        verifyGetter(collectionGetter);
+        verifyBuilder(builder);
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
@@ -177,13 +177,13 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<BuilderType, Item> function
     )
     {
-        if ( function == null ) throw new IllegalArgumentException("The function cannot be null.");
-        if ( collectionGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
-        if ( builder == null ) throw new IllegalArgumentException("The builder cannot be null.");
+        verifyFunction(function);
+        verifyGetter(collectionGetter);
+        verifyBuilder(builder);
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         ListOrSet targetCollection = collectionGetter.apply(object);
-        if ( targetCollection == null ) throw new NullPointerException("The target collection is null.");
+        verifyTargetCollection(targetCollection);
         newBuilder.parentCollection = targetCollection;
         newBuilder.aliasMap = aliasMap;
         newBuilder.parentFunctionForConsumer = function;
@@ -199,9 +199,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Value value
     )
     {
-        if ( mapGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        verifyGetter(mapGetter);
         MapType targetMap = mapGetter.apply(object);
-        if ( targetMap == null ) throw new NullPointerException("The target map is null.");
+        verifyTargetMap(targetMap);
         targetMap.put(key, value);
         return (GenericBuilder) this;
     }
@@ -316,9 +316,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             MapType map
     )
     {
-        if ( mapGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        verifyGetter(mapGetter);
         MapType targetMap = mapGetter.apply(object);
-        if ( targetMap == null ) throw new NullPointerException("The target map is null.");
+        verifyTargetMap(targetMap);
         targetMap.putAll(map);
         return (GenericBuilder) this;
     }
@@ -333,9 +333,9 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         BaseBuilder newBuilder = (BaseBuilder) builder;
         newBuilder.parent = this;
         newBuilder.aliasMap = aliasMap;
-        if ( mapGetter == null ) throw new IllegalArgumentException("The getter cannot be null.");
+        verifyGetter(mapGetter);
         MapType targetMap = mapGetter.apply(object);
-        if ( targetMap == null ) throw new NullPointerException("The target map is null.");
+        verifyTargetMap(targetMap);
         newBuilder.parentMap = targetMap;
         newBuilder.parentSetterType = ParentSetterType.MAP;
         newBuilder.parentKey = key;
@@ -374,7 +374,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Item, Value> itemValueFunction
     )
     {
-        if ( itemValueFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
+        verifyFunction(itemValueFunction);
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         return (NewBuilder) putWithBuilder(mapGetter, key, newBuilder);
@@ -388,7 +388,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Item, Value> itemValueFunction
     )
     {
-        if ( itemValueFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
+        verifyFunction(itemValueFunction);
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         Key key = (Key) getByAlias(keyAlias);
@@ -405,8 +405,8 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
             Function<Item, Value> itemValueFunction
     )
     {
-        if ( itemValueFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
-        if ( aliasKeyFunction == null ) throw new IllegalArgumentException("The function cannot be null.");
+        verifyFunction(itemValueFunction);
+        verifyFunction(aliasKeyFunction);
         BaseBuilder newBuilder = (BaseBuilder) valueBuilder;
         newBuilder.parentFunctionForMapValue = itemValueFunction;
         Alias key = (Alias) getByAlias(keyAlias);
@@ -464,7 +464,7 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
         return object;
     }
 
-    // private methods
+    // protected methods
 
     protected Object getByAlias(String keyAlias)
     {
@@ -477,5 +477,50 @@ public class BaseBuilder<Type, GenericBuilder extends FluentBuilder<Type, Generi
     {
         if ( alias == null )
             throw new IllegalArgumentException("The alias " + aliasName + " has not been defined. The alias must be defined before it is used.");
+    }
+
+    protected void verifySetter(Object setter)
+    {
+        verifyArgument(setter, "setter");
+    }
+
+    protected void verifyGetter(Object getter)
+    {
+        verifyArgument(getter, "getter");
+    }
+
+    protected void verifyFunction(Object function)
+    {
+        verifyArgument(function, "function");
+    }
+
+    protected void verifyCollection(Object collection)
+    {
+        verifyArgument(collection, "collection");
+    }
+
+    protected void verifyBuilder(Object builder)
+    {
+        verifyArgument(builder, "builder");
+    }
+
+    protected void verifyArgument(Object object, String name)
+    {
+        if ( object == null ) throw new IllegalArgumentException("The " + name + " cannot be null.");
+    }
+
+    protected void verifyTargetCollection(Object collection)
+    {
+        verifyNotNull(collection, "collection");
+    }
+
+    protected void verifyTargetMap(Object map)
+    {
+        verifyNotNull(map, "map");
+    }
+
+    protected void verifyNotNull(Object object, String name)
+    {
+        if ( object == null ) throw new NullPointerException("The target " + name + " cannot be null.");
     }
 }
