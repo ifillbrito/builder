@@ -8,7 +8,7 @@ This project provides a generic builder that can be used as it is for any object
 - Support for adding elements to collections and maps (nested builders)
 - Functions can be applied to internal builders
 
-For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/tree/master/builder/src/test/java/com/ifillbrito/builder'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
+For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/tree/master/builder/src/test/java/com/github/ifillbrito/builder'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
 
 ## Example:
 In the following example we show how to build a basic object using three approaches:
@@ -136,7 +136,7 @@ ObjectA main = MyBuilderA.of(new ObjectA())
     .build();
 ````
 
-For further details about ``MyBuilderA`` and ``MyBuilderB`` take a look at these <a href='https://github.com/ifillbrito/fluent-builder/tree/master/builder/src/test/java/com/ifillbrito/example'>files</a>.
+For further details about ``MyBuilderA`` and ``MyBuilderB`` take a look at these <a href='https://github.com/ifillbrito/fluent-builder/tree/master/builder/src/test/java/com/github/ifillbrito/example'>files</a>.
 
 ## License
 
