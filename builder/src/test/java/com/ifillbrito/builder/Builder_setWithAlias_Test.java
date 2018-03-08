@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by gjib on 25.01.18.
  */
-public class BuilderTest_setWithAlias
+public class Builder_setWithAlias_Test
 {
     @Test
     public void setWithAlias()

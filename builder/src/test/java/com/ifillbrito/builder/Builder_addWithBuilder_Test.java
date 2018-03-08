@@ -3,14 +3,13 @@ package com.ifillbrito.builder;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by gjib on 25.01.18.
  */
-public class BuilderTest_addWithBuilder
+public class Builder_addWithBuilder_Test
 {
     @Test
     public void addWithBuilder()

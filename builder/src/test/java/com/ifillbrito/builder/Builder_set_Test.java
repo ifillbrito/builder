@@ -2,12 +2,13 @@ package com.ifillbrito.builder;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by gjib on 25.01.18.
  */
-public class BuilderTest_set
+public class Builder_set_Test
 {
     @Test
     public void set()

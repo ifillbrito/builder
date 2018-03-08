@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by gjib on 25.01.18.
  */
-public class BuilderTest_put
+public class Builder_put_Test
 {
     @Test
     public void put()

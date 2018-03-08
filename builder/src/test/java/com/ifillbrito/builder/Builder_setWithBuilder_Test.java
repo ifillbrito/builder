@@ -4,12 +4,12 @@ import org.junit.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by gjib on 25.01.18.
  */
-public class BuilderTest_setWithBuilder
+public class Builder_setWithBuilder_Test
 {
     @Test
     public void getAliasMap()
