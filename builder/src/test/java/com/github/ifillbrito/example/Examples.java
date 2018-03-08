@@ -1,8 +1,8 @@
-package com.ifillbrito.example;
+package com.github.ifillbrito.example;
 
-import com.ifillbrito.builder.Builder;
-import com.ifillbrito.builder.ObjectA;
-import com.ifillbrito.builder.ObjectB;
+import com.github.ifillbrito.builder.Builder;
+import com.github.ifillbrito.builder.ObjectA;
+import com.github.ifillbrito.builder.ObjectB;
 import org.junit.Test;
 
 import java.util.ArrayList;

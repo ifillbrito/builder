@@ -1,4 +1,4 @@
-package com.ifillbrito.builder;
+package com.github.ifillbrito.builder;
 
 /**
  * Created by gjib on 25.01.18.

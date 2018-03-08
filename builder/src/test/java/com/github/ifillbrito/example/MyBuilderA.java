@@ -1,8 +1,8 @@
-package com.ifillbrito.example;
+package com.github.ifillbrito.example;
 
-import com.ifillbrito.builder.BaseBuilder;
-import com.ifillbrito.builder.ObjectA;
-import com.ifillbrito.builder.ObjectB;
+import com.github.ifillbrito.builder.BaseBuilder;
+import com.github.ifillbrito.builder.ObjectA;
+import com.github.ifillbrito.builder.ObjectB;
 
 import java.util.ArrayList;
 
@@ -16,30 +16,30 @@ public class MyBuilderA extends BaseBuilder<ObjectA, MyBuilderA>
         super(object);
     }
 
-    public static MyBuilderA of (ObjectA objectA)
+    public static MyBuilderA of(ObjectA objectA)
     {
         return new MyBuilderA(objectA);
     }
 
-    public MyBuilderA withText (String text)
+    public MyBuilderA withText(String text)
     {
         return super.set(ObjectA::setText, text);
     }
 
-    public MyBuilderA withNumber (int number)
+    public MyBuilderA withNumber(int number)
     {
         return super.set(ObjectA::setNumber, number);
     }
 
-    public MyBuilderA addObjectA ()
+    public MyBuilderA addObjectA()
     {
-        if (object.getObjectsA() == null) object.setObjectsA(new ArrayList<>());
+        if ( object.getObjectsA() == null ) object.setObjectsA(new ArrayList<>());
         return super.addWithBuilder(ObjectA::getObjectsA, MyBuilderA.of(new ObjectA()));
     }
 
-    public MyBuilderB addObjectB ()
+    public MyBuilderB addObjectB()
     {
-        if (object.getObjectsB() == null) object.setObjectsB(new ArrayList<>());
+        if ( object.getObjectsB() == null ) object.setObjectsB(new ArrayList<>());
         return super.addWithBuilder(ObjectA::getObjectsB, MyBuilderB.of(new ObjectB()));
     }
 

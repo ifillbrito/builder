@@ -1,4 +1,4 @@
-package com.ifillbrito.builder;
+package com.github.ifillbrito.builder;
 
 import org.junit.Test;
 

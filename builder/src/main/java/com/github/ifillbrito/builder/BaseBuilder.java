@@ -1,4 +1,4 @@
-package com.ifillbrito.builder;
+package com.github.ifillbrito.builder;
 
 import java.util.Collection;
 import java.util.HashMap;
