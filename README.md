@@ -1,13 +1,11 @@
-This project provides a generic fluent builder that can be used as it is for any object. However, it is recommended to extend the ``BaseBuilder`` class to assign more appropiate names to the builder methods and improve the code readability. The builder uses method reference to setup the values in the target object.
+This project provides a generic builder that can be used as it is for any object. However, it is recommended to extend the ``BaseBuilder`` class to assign more appropiate names to the builder methods and improve the code readability. The builder uses method reference to setup the values in the target object.
 
 ## Features
-- Fluent
-- Internal References (aliases)
+- Internal references (aliases)
+- Support for adding elements to collections and maps (nested builders)
 - Functions can be applied to internal builders
-- Support for adding elements to collections and maps
-  - Warning! The unit tests for maps are missing.
 
-For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/blob/master/builder/src/test/java/com/ifillbrito/builder/BuilderTest.java'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
+For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/fluent-builder/tree/master/builder/src/test/java/com/ifillbrito/builder'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
 
 ## Example:
 In the following example we show how to build a basic object using three approaches:
@@ -71,36 +69,36 @@ childA3.setNumber(3);
 
 ### Using the Generic Builder
 ````java
-ObjectA main = Builder.of(new ObjectA())
-    .set(ObjectA::setText, "main")
-    .set(ObjectA::setNumber, 0)
-    .set(ObjectA::setObjectsA, new ArrayList<>())
-    .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
-        .set(ObjectA::setText, "child A1")
-        .set(ObjectA::setNumber, 1)
-        .set(ObjectA::setObjectsB, new ArrayList<>())
-        .addWithBuilder(ObjectA::getObjectsB, Builder.of(new ObjectB()))
-            .set(ObjectB::setText, "child B11")
-            .set(ObjectB::setFlag, true)
-            .toParent(ObjectA.class)
-        .addWithBuilder(ObjectA::getObjectsB, Builder.of(new ObjectB()))
-            .set(ObjectB::setText, "child B12")
-            .set(ObjectB::setFlag, false)
-            .toParent(ObjectA.class)
-        .toParent(ObjectA.class)
-    .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
-        .set(ObjectA::setText, "child A2")
-        .set(ObjectA::setNumber, 2)
-        .addWithBuilder(ObjectA::getObjectsB, Builder.of(new ObjectB()))
-            .set(ObjectB::setText, "child B21")
-            .set(ObjectB::setFlag, true)
-            .toParent(ObjectA.class)
-        .toParent(ObjectA.class)
-    .addWithBuilder(ObjectA::getObjectsA, Builder.of(new ObjectA()))
-        .set(ObjectA::setText, "child A3")
-        .set(ObjectA::setNumber, 3)
-        .toParent()
-    .build();
+ObjectA main = new Builder<>(new ObjectA())
+  .set(ObjectA::setText, "main")
+  .set(ObjectA::setNumber, 0)
+  .set(ObjectA::setObjectsA, new ArrayList<>())
+  .addWithBuilder(ObjectA::getObjectsA, new Builder<>(new ObjectA()))
+      .set(ObjectA::setText, "child A1")
+      .set(ObjectA::setNumber, 1)
+      .set(ObjectA::setObjectsB, new ArrayList<>())
+      .addWithBuilder(ObjectA::getObjectsB, new Builder<>(new ObjectB()))
+          .set(ObjectB::setText, "child B11")
+          .set(ObjectB::setFlag, true)
+          .toParent(ObjectA.class)
+      .addWithBuilder(ObjectA::getObjectsB, new Builder<>(new ObjectB()))
+          .set(ObjectB::setText, "child B12")
+          .set(ObjectB::setFlag, false)
+          .toParent(ObjectA.class)
+      .toParent(ObjectA.class)
+  .addWithBuilder(ObjectA::getObjectsA, new Builder<>(new ObjectA()))
+      .set(ObjectA::setText, "child A2")
+      .set(ObjectA::setNumber, 2)
+      .addWithBuilder(ObjectA::getObjectsB, new Builder<>(new ObjectB()))
+          .set(ObjectB::setText, "child B21")
+          .set(ObjectB::setFlag, true)
+          .toParent(ObjectA.class)
+      .toParent(ObjectA.class)
+  .addWithBuilder(ObjectA::getObjectsA, new Builder<>(new ObjectA()))
+      .set(ObjectA::setText, "child A3")
+      .set(ObjectA::setNumber, 3)
+      .toParent()
+  .build();
 ````
 
 ### Using Specific Builders (``extends BaseBuilder``)
