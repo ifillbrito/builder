@@ -36,7 +36,7 @@ For more details about how to use the generic builder, take a look at the <a hre
 ### JavaDocs (in progress)
 https://jitpack.io/com/github/ifillbrito/builder/1.0.0/javadoc/
 
-## Example:
+## Usage Example:
 In the following example we show how to build a basic object using three approaches:
 1. Without using a builder
 2. Using the generic builder
@@ -53,7 +53,7 @@ main object     [text=main,         number=0]
     child       [text=child A3,     number=3]
 ````
 
-### Without using Builders
+### 1. Without using Builders
 ```java
 ObjectA main = new ObjectA();
 main.setText("main");
@@ -96,7 +96,7 @@ childA3.setText("child A3");
 childA3.setNumber(3);
 ``` 
 
-### Using the Generic Builder
+### 2. Using the Generic Builder
 ````java
 ObjectA main = new Builder<>(new ObjectA())
   .set(ObjectA::setText, "main")
@@ -130,7 +130,7 @@ ObjectA main = new Builder<>(new ObjectA())
   .build();
 ````
 
-### Using Specific Builders (``extends BaseBuilder``)
+### 3. Using Specific Builders (``extends BaseBuilder``)
 ````java
 ObjectA main = MyBuilderA.of(new ObjectA())
     .withText("main")
