@@ -33,6 +33,8 @@ For more details about how to use the generic builder, take a look at the <a hre
 </dependencies>
 ...
 ```
+### JavaDocs (in progress)
+https://jitpack.io/com/github/ifillbrito/builder/1.0.0/javadoc/
 
 ## Example:
 In the following example we show how to build a basic object using three approaches:
