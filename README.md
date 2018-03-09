@@ -27,7 +27,7 @@ For more details about how to use the generic builder, take a look at the <a hre
     <dependency>
         <groupId>com.github.ifillbrito</groupId>
         <artifactId>builder</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
     ...
 </dependencies>
