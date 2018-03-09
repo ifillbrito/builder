@@ -9,7 +9,7 @@ This project provides a generic builder that can be used as it is for any object
 - Support for adding elements to collections and maps (nested builders)
 - Functions can be applied to internal builders
 
-For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/builder/tree/1.0.1/builder/src/test/java/com/github/ifillbrito/builder'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
+For more details about how to use the generic builder, take a look at the <a href='https://github.com/ifillbrito/builder/tree/master/builder/src/test/java/com/github/ifillbrito/builder'>unit tests</a>. The unit tests use the generic builder directly. Don't forget to extend the class ``BaseBuilder`` in order to improve code readability.
 
 ## Download
 [![](https://jitpack.io/v/ifillbrito/builder.svg)](https://jitpack.io/#ifillbrito/builder)
@@ -34,7 +34,7 @@ For more details about how to use the generic builder, take a look at the <a hre
 ...
 ```
 ### JavaDocs (in progress)
-[API](https://jitpack.io/com/github/ifillbrito/builder/1.0.1/javadoc/)
+[API - version 1.0.1](https://jitpack.io/com/github/ifillbrito/builder/1.0.1/javadoc/)
 
 ## Usage Example:
 In the following example we show how to build a basic object using three approaches:
@@ -162,7 +162,7 @@ ObjectA main = MyBuilderA.of(new ObjectA())
     .build();
 ````
 
-For further details about ``MyBuilderA`` and ``MyBuilderB`` take a look at these <a href='https://github.com/ifillbrito/builder/tree/1.0.1/builder/src/test/java/com/github/ifillbrito/example'>files</a>.
+For further details about ``MyBuilderA`` and ``MyBuilderB`` take a look at these <a href='https://github.com/ifillbrito/builder/tree/master/builder/src/test/java/com/github/ifillbrito/example'>files</a>.
 
 ## License
 
